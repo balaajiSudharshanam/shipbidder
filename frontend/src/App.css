@@ -1,0 +1,8 @@
+.App{
+  min-height: 100vh;
+  display:flex;
+  background-image: url('https://www.onlygfx.com/wp-content/uploads/2017/03/blue-burst-abstract-bg.png');
+  background-size:cover ;
+  background-position: center;
+  width: 100vw;
+}
