@@ -1,10 +1,11 @@
 .menuBar ul{
     display:flex;
-    width:100%;
+    width:99%;
     justify-content: space-between;
     list-style:none;
-    
+    padding: 10px;
     background-color: rgb(143, 83, 4);
+    margin:0px;
 }
 
 .menuBar ul li a{

@@ -18,11 +18,13 @@ const registerUser = asyncHandler(async (req, res) => {
         res.status(400);
         throw new Error("User already exists");
     }
-
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    // console.log(hashedPassword);
     const user = await User.create({
         name,
         email,
-        password,
+        password: hashedPassword,
         role
     });
 
@@ -50,9 +52,9 @@ const authUser = asyncHandler(async (req, res) => {
     }
 
     const user = await User.findOne({ email });
-
+    console.log(user);
     // Use comparePassword instead of matchPassword
-    if (user && (await user.comparePassword(password))) {
+    if (user && (await user.matchPassword(password))) {
         res.status(201).json({
             id: user._id,
             name: user.name,
@@ -65,5 +67,19 @@ const authUser = asyncHandler(async (req, res) => {
         throw new Error("Invalid email or password");
     }
 });
+const allUsers = asyncHandler(async (req, res) => {
+    const keyword = req.query.search
+        ? {
+            $or: [
+                { name: { $regex: req.query.search, $options: 'i' } },
+                { email: { $regex: req.query.search, $options: 'i' } },
+            ],
+        }
+        : {};
+        // console.log(req.user);
 
-module.exports = { registerUser, authUser };
+    const users = await User.find();
+    res.send(users);
+});
+
+module.exports = { registerUser, authUser,allUsers };
