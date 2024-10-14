@@ -5,7 +5,7 @@ const userSchema=new mongoose.Schema({
     name:{
         type: String,
         required: true,
-        unique:true
+        
     },
     email:{
         type: String,
@@ -30,7 +30,7 @@ const userSchema=new mongoose.Schema({
 },{timestamps:true});
 
 userSchema.methods.matchPassword=async function(enteredPassword){
-    console.log(enteredPassword);
+    // console.log(enteredPassword);
     return await bcrypt.compare(enteredPassword,this.password)
 }
 
