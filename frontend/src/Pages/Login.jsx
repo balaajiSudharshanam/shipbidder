@@ -3,8 +3,19 @@ import MenuBar from '../Components/MenuBar/MenuBar'
 import Register from '../Components/Register/Register'
 import Signup from '../Components/Signup/Signup'
 import { Grid, Box, Paper } from '@mui/material'
+import { useNavigate } from 'react-router'
+import { userState } from '../context/UserContextProvider'
 
 const Login = () => {
+  const{user,setUser}=userState();
+  const nav=useNavigate();
+  if(user){
+    if(user.role==='provider'){
+      nav('/provider');
+    }else{
+      nav('/seeker');
+    }
+  }
   return (
     <div>
       <MenuBar />
