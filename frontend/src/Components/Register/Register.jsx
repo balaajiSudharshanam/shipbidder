@@ -28,18 +28,22 @@ const Register = () => {
         e.preventDefault();
         
         // Create a form data object to handle file upload
-        const formData = new FormData();
-        formData.append('name', name);
-        formData.append('email', email);
-        formData.append('password', password);
-        formData.append('role', role);
-        formData.append('photo', photo); 
+        const formData={
+            name,
+            email,
+            password,
+            role,
+            photo
+        }
 
         try {
-            const response = await axios.post('http://localhost:3500/api/user', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
+          
+            const response = await axios.post('http://localhost:3500/api/user', {
+                name,
+                email,
+                password,
+                role,
+                photo
             });
             
             if (response) {
