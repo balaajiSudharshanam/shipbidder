@@ -18,7 +18,7 @@ const createAuction = asyncHandler(async (req, res) => {
     return res.status(400).json({ message: 'Please provide all required fields' });
   }
 
-  // Create auction by passing object to Auction.create
+  // Create auction
   const auction = await Auction.create({
     jobTitle,
     jobDescription,
@@ -30,20 +30,14 @@ const createAuction = asyncHandler(async (req, res) => {
     dropDateTime
   });
 
-  if (auction) {
-    
-    const populatedAuction = await auction
-      .populate('jobProvider', 'name email') // Populate user details (job provider)
-      .populate('pickupLocation', 'longitude latitude') // Populate pickup location
-      .populate('dropLocation', 'longitude latitude') // Populate drop location
-      .populate('item') // Populate item details
-      
+  // Re-fetch the auction to allow population
+  const populatedAuction = await Auction.findById(auction._id)
+    .populate('jobProvider', 'name email')
+    .populate('pickupLocation', 'longitude latitude')
+    .populate('dropLocation', 'longitude latitude')
+    .populate('item');
 
-    return res.status(201).json(populatedAuction); // Return populated auction
-  } else {
-    res.status(400);
-    throw new Error('Failed to create new auction');
-  }
+  return res.status(201).json(populatedAuction); // Return populated auction
 });
 
 module.exports = { createAuction };

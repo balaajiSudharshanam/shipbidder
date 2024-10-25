@@ -38,6 +38,7 @@ const createItem = asyncHandler(async (req, res) => {
   });
 
   if (item) {
+    item.populate('createdBy',"name email");
     res.status(201).json(item);
   } else {
     res.status(400);
@@ -45,4 +46,4 @@ const createItem = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { createItem };
+module.exports = { createItem }; // Ensure you're exporting the controller correctly
