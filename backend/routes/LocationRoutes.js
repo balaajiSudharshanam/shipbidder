@@ -1,7 +1,7 @@
 const express=require('express');
 const { protect } = require('../Middleware/authMiddleware');
-const { createAuction } = require('../Controllers/AutionControler');
+const { createLocation } = require('../Controllers/LocationController');
 const router=express.Router();
 
-router.route('/').post(protect,createAuction);
+router.route('/').post(protect,createLocation);
 module.exports=router;
