@@ -37,7 +37,42 @@ const createAuction = asyncHandler(async (req, res) => {
     .populate('dropLocation', 'longitude latitude')
     .populate('item');
 
-  return res.status(201).json(populatedAuction); // Return populated auction
+  return res.status(201).json(populatedAuction); 
+});
+const getEmployerAuctions = asyncHandler(async (req, res) => {
+  const { employerId } = req.params; 
+
+  
+  const auctions = await Auction.find({ jobProvider: employerId })
+    .populate('jobProvider', 'name email') 
+    .populate('pickupLocation', 'longitude latitude')
+    .populate('dropLocation', 'longitude latitude')
+    .populate('item');
+
+  if (!auctions || auctions.length === 0) {
+    return res.status(404).json({ message: 'No auctions found for this employer' });
+  }
+
+  res.json(auctions);
+});
+const getFilteredAuctions = asyncHandler(async (req, res) => {
+  const { jobTitle, category, minPrice, maxPrice, status, page = 1, limit = 10 } = req.query;
+
+  const filter = {};
+  if (jobTitle) filter.jobTitle = { $regex: jobTitle, $options: 'i' };
+  if (category) filter['item.category'] = category;
+  if (status) filter.status = status;
+  if (minPrice || maxPrice) filter['item.price'] = { ...(minPrice && { $gte: minPrice }), ...(maxPrice && { $lte: maxPrice }) };
+
+  const auctions = await Auction.find(filter)
+    .skip((page - 1) * limit)
+    .limit(parseInt(limit))
+    .populate('jobProvider', 'name email')
+    .populate('pickupLocation', 'longitude latitude')
+    .populate('dropLocation', 'longitude latitude')
+    .populate('item');
+
+  res.json({ page, limit, total: auctions.length, auctions });
 });
 
-module.exports = { createAuction };
+module.exports = { createAuction, getEmployerAuctions,getFilteredAuctions};

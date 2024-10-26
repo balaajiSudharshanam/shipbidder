@@ -5,7 +5,7 @@ const ProviderDashBoard = () => {
   return (
     <div>
       <MenuBar />
-      Employer Dashboard
+      
     </div>
   )
 }

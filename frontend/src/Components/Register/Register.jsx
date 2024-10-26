@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Button, FormControl, InputLabel, Input, MenuItem, Paper, Select, Typography, Grid } from '@mui/material';
 import axios from 'axios';
 import { styled } from '@mui/material/styles';
@@ -23,7 +23,9 @@ const Register = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [role, setRole] = useState('seeker');
     const [photo, setPhoto] = useState(null); // State to hold the file
-
+    useEffect(()=>{
+        console.log(photo);
+    },[photo]);
     const handleRegister = async (e) => {
         e.preventDefault();
         
