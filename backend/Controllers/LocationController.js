@@ -29,5 +29,19 @@ const createLocation = asyncHandler(async (req, res) => {
     throw new Error('Failed to create location');
   }
 });
+const getAddressByAddressLine=asyncHandler(async(req,res)=>{
+  const{addressLine}=req.query;
+  if(!addressLine){
+    res.status(400).json({message:"Please provide an address for search"});
+    const location=await Location.find({
+      address:{$regex:new RegExp(addressLine,'i')}
+    });
+    if(location.length>0){
+      res.json(locations);
+    }else{
+      res.status(404).json({message:"No address found matching this address line"});
+    }
+  }
+})
 
-module.exports = { createLocation };
+module.exports = { createLocation, getAddressByAddressLine};

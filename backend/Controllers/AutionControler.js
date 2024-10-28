@@ -1,4 +1,5 @@
 const Auction = require('../Model/AuctionModel');
+const User=require('../Model/UserModel');
 const asyncHandler = require('express-async-handler');
 
 const createAuction = asyncHandler(async (req, res) => {
@@ -19,25 +20,36 @@ const createAuction = asyncHandler(async (req, res) => {
   }
 
   // Create auction
-  const auction = await Auction.create({
-    jobTitle,
-    jobDescription,
-    jobProvider,
-    pickupLocation,
-    dropLocation,
-    item,
-    pickupDateTime,
-    dropDateTime
-  });
-
-  // Re-fetch the auction to allow population
-  const populatedAuction = await Auction.findById(auction._id)
+  try{
+   const user= User.findById(jobProvider);
+   
+  }catch(e){
+    console.log(e);
+  }
+  if(user.role=="provider"){
+    const auction = await Auction.create({
+      jobTitle,
+      jobDescription,
+      jobProvider,
+      pickupLocation,
+      dropLocation,
+      item,
+      pickupDateTime,
+      dropDateTime
+    });
+    const populatedAuction = await Auction.findById(auction._id)
     .populate('jobProvider', 'name email')
     .populate('pickupLocation', 'longitude latitude')
     .populate('dropLocation', 'longitude latitude')
     .populate('item');
 
-  return res.status(201).json(populatedAuction); 
+  return res.status(201).json(populatedAuction)
+  }else{
+    return res.sendStatus(403).json({message:"Only Employer can create an auction"})
+  }
+
+  // Re-fetch the auction to allow population
+  ; 
 });
 const getEmployerAuctions = asyncHandler(async (req, res) => {
   const { employerId } = req.params; 

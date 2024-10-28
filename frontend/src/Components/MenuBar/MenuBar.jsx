@@ -13,7 +13,8 @@ const MenuBar = () => {
     nav('/login');
   }
   return (
-    <AppBar >
+    <div>
+    <AppBar position="fixed">
       <Toolbar>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           Shipbid
@@ -36,6 +37,8 @@ const MenuBar = () => {
         </Box>
       </Toolbar>
     </AppBar>
+    <Toolbar/>
+    </div>
   );
 };
 
