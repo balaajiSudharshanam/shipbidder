@@ -26,7 +26,7 @@ const ProviderWidget = () => {
   return (
     <div>
         <Card sx={{m:2}}>
-           
+           widget
         </Card>
      
     </div>
