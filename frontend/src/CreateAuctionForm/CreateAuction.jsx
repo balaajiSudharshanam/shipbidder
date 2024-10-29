@@ -1,9 +1,10 @@
 import React from 'react'
+import CreateLocation from './CreateLocation'
 
 const CreateAuction = () => {
   return (
     <div>
-      multistep form
+     <CreateLocation/>
     </div>
   )
 }
