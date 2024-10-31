@@ -3,32 +3,53 @@ const asyncHandler = require('express-async-handler');
 
 // Create a new location
 const createLocation = asyncHandler(async (req, res) => {
-  const { address, city, state, postalCode, latitude, longitude } = req.body;
+  console.log("hit");
+  const { 
+    pickupAddress, pickupCity, pickupState, pickupPostalCode, pickupLatitude, pickupLongitude, 
+    dropAddress, dropCity, dropState, dropPostalCode, dropLatitude, dropLongitude 
+  } = req.body;
 
-  // Validate required fields
-  if (!address || !city || !latitude || !longitude) {
-    return res.status(400).json({ message: 'Please provide all required fields' });
+  // Validate required fields for both pickup and drop locations
+  if (!pickupAddress || !pickupCity || !pickupLatitude || !pickupLongitude ||
+      !dropAddress || !dropCity || !dropLatitude || !dropLongitude) {
+    return res.status(400).json({ message: 'Please provide all required fields for both pickup and drop locations' });
   }
 
-  // Create the location
-  const location = await Location.create({
-    address,
-    city,
-    state,
-    postalCode,
+  // Create the pickup location
+  const pickupLocation = await Location.create({
+    address: pickupAddress,
+    city: pickupCity,
+    state: pickupState,
+    postalCode: pickupPostalCode,
     coordinates: {
-      lat: latitude,
-      lng: longitude
-    }
+      lat: pickupLatitude,
+      lng: pickupLongitude
+    },
+    
   });
 
-  if (location) {
-    res.status(201).json(location);
+  // Create the drop location
+  const dropLocation = await Location.create({
+    address: dropAddress,
+    city: dropCity,
+    state: dropState,
+    postalCode: dropPostalCode,
+    coordinates: {
+      lat: dropLatitude,
+      lng: dropLongitude
+    },
+   
+  });
+
+  
+  if (pickupLocation && dropLocation) {
+    res.status(201).json({ pickupLocation, dropLocation });
   } else {
     res.status(400);
-    throw new Error('Failed to create location');
+    throw new Error('Failed to create pickup or drop location');
   }
 });
+
 const getAddressByAddressLine=asyncHandler(async(req,res)=>{
   const{addressLine}=req.query;
   if(!addressLine){
