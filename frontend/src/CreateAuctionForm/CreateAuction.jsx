@@ -1,10 +1,12 @@
 import React from 'react'
 import CreateLocation from './CreateLocation'
+import CreateItem from './CreateItem'
 
 const CreateAuction = () => {
   return (
     <div>
-     <CreateLocation/>
+     {/* <CreateLocation/> */}
+     <CreateItem/>
     </div>
   )
 }
