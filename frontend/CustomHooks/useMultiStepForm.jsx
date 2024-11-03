@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export function useMultiStepForm({ steps }) {
+export function useMultiStepForm( steps ) {
     const [currentStep, setCurrentStep] = useState(0);
-
+   
     function next() {
         setCurrentStep(i => {
             if (i >= steps.length - 1) return i;
