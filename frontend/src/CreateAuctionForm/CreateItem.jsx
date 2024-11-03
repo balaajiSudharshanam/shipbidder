@@ -1,28 +1,24 @@
 import { TextField, Typography, Button, Grid, Box, FormControlLabel, Checkbox, Avatar } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { userState } from '../context/UserContextProvider';
+import { useFormState } from '../context/FormContextProvide';
+;
 
 const CreateItem = () => {
     const { user } = userState();
-    const [formData, setFormData] = useState({
-        createdBy: user.id,
-        pic: '',
-        height: '',
-        length: '',
-        width: '',
-        weight: '',
-        category: '',
-        subCategory: '',
-        isFragile: false,
-        isHazardous: false,
-        description: ''
-    });
-    const [preview, setPreview] = useState(null); // To display image preview
-
+    const{itemFormData,setItemFormData}=useFormState();
+    
+    const [preview, setPreview] = useState(null); 
+   useEffect(() => {
+        setItemFormData((prevData) => ({
+            ...prevData,
+            createdBy: user.id, 
+        }));
+    }, [user.id, setItemFormData]);
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
-        setFormData((prevData) => ({
+        setItemFormData((prevData) => ({
             ...prevData,
             [name]: type === 'checkbox' ? checked : value,
         }));
@@ -54,24 +50,10 @@ const CreateItem = () => {
         }
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            const config = {
-                headers: {
-                    'Content-type': 'application/json',
-                    Authorization: `Bearer ${user.token}`,
-                },
-            };
-            const response = await axios.post('http://localhost:3500/api/item', formData, config);
-            console.log('Item created successfully:', response.data);
-        } catch (error) {
-            console.error('Error creating item:', error);
-        }
-    };
+   
 
     return (
-        <Box component="form" onSubmit={handleSubmit} sx={{ p: 3 }}>
+        <Box component="form"  sx={{ p: 3 }}>
             <Typography variant="h5" mb={2}>Enter Item Details</Typography>
             
             <Grid container spacing={2}>
@@ -86,6 +68,7 @@ const CreateItem = () => {
                                 accept="image/*"
                                 onChange={handleImageUpload}
                                 hidden
+                                value={itemFormData.pic}
                             />
                         </Button>
                     </Box>
@@ -95,7 +78,7 @@ const CreateItem = () => {
                     <TextField
                         label="Height"
                         name="height"
-                        value={formData.height}
+                        value={itemFormData.height}
                         onChange={handleChange}
                         fullWidth
                         required
@@ -106,7 +89,7 @@ const CreateItem = () => {
                     <TextField
                         label="Length"
                         name="length"
-                        value={formData.length}
+                        value={itemFormData.length}
                         onChange={handleChange}
                         fullWidth
                         required
@@ -117,7 +100,7 @@ const CreateItem = () => {
                     <TextField
                         label="Width"
                         name="width"
-                        value={formData.width}
+                        value={itemFormData.width}
                         onChange={handleChange}
                         fullWidth
                         required
@@ -128,7 +111,7 @@ const CreateItem = () => {
                     <TextField
                         label="Weight"
                         name="weight"
-                        value={formData.weight}
+                        value={itemFormData.weight}
                         onChange={handleChange}
                         fullWidth
                         required
@@ -139,7 +122,7 @@ const CreateItem = () => {
                     <TextField
                         label="Category"
                         name="category"
-                        value={formData.category}
+                        value={itemFormData.category}
                         onChange={handleChange}
                         fullWidth
                         required
@@ -150,7 +133,7 @@ const CreateItem = () => {
                     <TextField
                         label="Subcategory"
                         name="subCategory"
-                        value={formData.subCategory}
+                        value={itemFormData.subCategory}
                         onChange={handleChange}
                         fullWidth
                     />
@@ -161,7 +144,7 @@ const CreateItem = () => {
                         control={
                             <Checkbox
                                 name="isFragile"
-                                checked={formData.isFragile}
+                                checked={itemFormData.isFragile}
                                 onChange={handleChange}
                             />
                         }
@@ -171,7 +154,7 @@ const CreateItem = () => {
                         control={
                             <Checkbox
                                 name="isHazardous"
-                                checked={formData.isHazardous}
+                                checked={itemFormData.isHazardous}
                                 onChange={handleChange}
                             />
                         }
@@ -183,7 +166,7 @@ const CreateItem = () => {
                     <TextField
                         label="Description"
                         name="description"
-                        value={formData.description}
+                        value={itemFormData.description}
                         onChange={handleChange}
                         fullWidth
                         multiline
@@ -192,11 +175,11 @@ const CreateItem = () => {
                 </Grid>
             </Grid>
 
-            <Box mt={3}>
+            {/* <Box mt={3}>
                 <Button type="submit" variant="contained" color="primary">
                     Submit
                 </Button>
-            </Box>
+            </Box> */}
         </Box>
     );
 };
