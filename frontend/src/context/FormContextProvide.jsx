@@ -115,14 +115,14 @@ const FormContextProvider = ({ children }) => {
                 // 2. Create item
                 const itemResponse = await axios.post('http://localhost:3500/api/item', itemFormData, config);
                 const itemData = itemResponse.data;
-
+                console.log(itemData);
                 // 3. Create auction
                 const auctionResponse = await axios.post(
                     'http://localhost:3500/api/auction',
                     {
                         ...auction,
-                        pickupLocation: locationData._id,
-                        dropLocation: locationData._id,
+                        pickupLocation: locationData.pickupLocation._id,
+                        dropLocation: locationData.dropLocation._id,
                         item: itemData._id,
                        
                     },
