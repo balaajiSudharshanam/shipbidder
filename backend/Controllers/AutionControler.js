@@ -15,17 +15,15 @@ const createAuction = asyncHandler(async (req, res) => {
   } = req.body;
 
   // Validate required fields
-  if (!jobTitle || !jobProvider || !pickupLocation || !dropLocation || !item || !pickupDateTime || !dropDateTime || budget) {
+  if (!jobTitle || !jobProvider || !pickupLocation || !dropLocation || !item || !pickupDateTime || !dropDateTime) {
     return res.status(400).json({ message: 'Please provide all required fields' });
   }
 
   // Create auction
-  try{
-   const user= User.findById(jobProvider);
+  
+   const user=  await User.findById(jobProvider);
    
-  }catch(e){
-    console.log(e);
-  }
+  
   if(user.role=="provider"){
     const auction = await Auction.create({
       jobTitle,

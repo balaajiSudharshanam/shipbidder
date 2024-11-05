@@ -3,19 +3,20 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { userState } from '../context/UserContextProvider';
 import { useFormState } from '../context/FormContextProvide';
-;
 
 const CreateItem = () => {
     const { user } = userState();
-    const{itemFormData,setItemFormData}=useFormState();
+    const { itemFormData, setItemFormData } = useFormState();
     
     const [preview, setPreview] = useState(null); 
-   useEffect(() => {
+
+    useEffect(() => {
         setItemFormData((prevData) => ({
             ...prevData,
             createdBy: user.id, 
         }));
     }, [user.id, setItemFormData]);
+
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
         setItemFormData((prevData) => ({
@@ -28,10 +29,8 @@ const CreateItem = () => {
         const file = e.target.files[0];
         if (!file) return;
 
-        
         setPreview(URL.createObjectURL(file));
 
-        
         const data = new FormData();
         data.append('file', file);
         data.append('upload_preset', 'chatapp');  
@@ -40,7 +39,7 @@ const CreateItem = () => {
         try {
             const response = await axios.post('https://api.cloudinary.com/v1_1/djlishmg4/image/upload', data);
             const imageUrl = response.data.secure_url;
-            setFormData((prevData) => ({
+            setItemFormData((prevData) => ({
                 ...prevData,
                 pic: imageUrl,  
             }));
@@ -50,10 +49,8 @@ const CreateItem = () => {
         }
     };
 
-   
-
     return (
-        <Box component="form"  sx={{ p: 3 }}>
+        <Box component="form" sx={{ p: 3 }}>
             <Typography variant="h5" mb={2}>Enter Item Details</Typography>
             
             <Grid container spacing={2}>
@@ -68,7 +65,6 @@ const CreateItem = () => {
                                 accept="image/*"
                                 onChange={handleImageUpload}
                                 hidden
-                                value={itemFormData.pic}
                             />
                         </Button>
                     </Box>
@@ -174,12 +170,6 @@ const CreateItem = () => {
                     />
                 </Grid>
             </Grid>
-
-            {/* <Box mt={3}>
-                <Button type="submit" variant="contained" color="primary">
-                    Submit
-                </Button>
-            </Box> */}
         </Box>
     );
 };

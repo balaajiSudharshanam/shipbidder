@@ -85,27 +85,7 @@ const AuctionForm = () => {
                     />
                 </Grid>
 
-                <Grid item xs={12} sm={6}>
-                    <TextField
-                        label="Pickup Location ID"
-                        name="pickupLocation"
-                        value={auction.pickupLocation}
-                        onChange={handleChange}
-                        fullWidth
-                        required
-                    />
-                </Grid>
-
-                <Grid item xs={12} sm={6}>
-                    <TextField
-                        label="Drop Location ID"
-                        name="dropLocation"
-                        value={auction.dropLocation}
-                        onChange={handleChange}
-                        fullWidth
-                        required
-                    />
-                </Grid>
+                
             </Grid>
 
             
