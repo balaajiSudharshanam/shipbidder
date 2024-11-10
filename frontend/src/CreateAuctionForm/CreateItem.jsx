@@ -3,11 +3,19 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { userState } from '../context/UserContextProvider';
 import { useFormState } from '../context/FormContextProvide';
+import CreateLocation from './CreateLocation';
+import AuctionForm from './AuctionForm';
+import { useMultiStepForm } from '../../CustomHooks/useMultiStepForm';
 
 const CreateItem = () => {
     const { user } = userState();
     const { itemFormData, setItemFormData } = useFormState();
-    
+    const steps = [
+        <CreateLocation />,
+        <CreateItem />,
+        <AuctionForm />
+      ];
+      const { currentStep, step, back, next } = useMultiStepForm(steps);
     const [preview, setPreview] = useState(null); 
 
     useEffect(() => {
@@ -51,7 +59,7 @@ const CreateItem = () => {
 
     return (
         <Box component="form" sx={{ p: 3 }}>
-            <Typography variant="h5" mb={2}>Enter Item Details</Typography>
+            
             
             <Grid container spacing={2}>
                 <Grid item xs={12}>

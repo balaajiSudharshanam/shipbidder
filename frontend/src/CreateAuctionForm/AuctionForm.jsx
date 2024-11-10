@@ -29,7 +29,7 @@ const AuctionForm = () => {
 
     return (
         <Box component="form"  sx={{ p: 3 }}>
-            <Typography variant="h5" mb={2}>Create Auction</Typography>
+            
             
             <Grid container spacing={2}>
                 <Grid item xs={12}>

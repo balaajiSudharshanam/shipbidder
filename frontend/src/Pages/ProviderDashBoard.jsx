@@ -43,7 +43,7 @@ const ProviderDashBoard = () => {
           outline: 'none'
 
         }}>
-          <CreateAuction/>
+          <CreateAuction handleModal={handleModal}/>
         </Box>
       </Modal>
     </div>

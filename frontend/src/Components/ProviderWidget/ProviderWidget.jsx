@@ -16,7 +16,8 @@ const ProviderWidget = () => {
             },
         };
         // console.log(config);
-        const data= axios.get(`http://localhost:3500/api/auction/${user.id}`,config)
+        const data= axios.get(`http://localhost:3500/api/auction/employer/${user.id}`,config)
+        console.log(data);
         if(data){
             console.log(data);
         }
