@@ -7,6 +7,7 @@ const FormContext = createContext();
 
 const FormContextProvider = ({ children }) => {
     const { user } = userState();
+    const [locationErrors, setLocationErrors] = useState({});
 
     const [locationFormData, setLocationFormData] = useState({
         pickupAddress: '',
@@ -139,7 +140,7 @@ const FormContextProvider = ({ children }) => {
     };
 
     return (
-        <FormContext.Provider value={{ locationFormData, setLocationFormData, itemFormData, setItemFormData, auction, setAuctionData, creatauction }}>
+        <FormContext.Provider value={{ locationFormData, setLocationFormData, itemFormData, setItemFormData, auction, setAuctionData, creatauction, locationErrors, setLocationErrors }}>
             {children}
         </FormContext.Provider>
     );
