@@ -1,14 +1,22 @@
 import React, { useState, createContext, useContext } from 'react';
 import { userState } from './UserContextProvider';
 import axios from 'axios';
+import CreateLocation from '../CreateAuctionForm/CreateLocation';
+import CreateItem from '../CreateAuctionForm/CreateItem';
+import AuctionForm from '../CreateAuctionForm/AuctionForm';
 
 // Create the context
 const FormContext = createContext();
 
 const FormContextProvider = ({ children }) => {
     const { user } = userState();
-    const [locationErrors, setLocationErrors] = useState({});
-
+    const [Errors, setErrors] = useState({});
+    const [itemErrors, setItemErrors] = useState({});
+    const steps = [
+        <CreateLocation />,
+        <CreateItem />,
+        <AuctionForm />
+      ];
     const [locationFormData, setLocationFormData] = useState({
         pickupAddress: '',
         pickupCity: '',
@@ -72,6 +80,22 @@ const FormContextProvider = ({ children }) => {
     };
 
     const creatauction = async () => {
+        const newErrors={};
+        const requiredFields=[
+            'jobTitle',
+            'pickupDateTime',
+            'dropDateTime',
+            'budget'
+        ];
+        requiredFields.forEach((field)=>{
+            if(!auction[field]){
+                newErrors[field]='This field is required'
+            }
+        });
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors); 
+            return;
+        }
         const pickupAddress = `${locationFormData.pickupAddress}, ${locationFormData.pickupCity}, ${locationFormData.pickupState} - ${locationFormData.pickupPostalCode}`;
         const dropAddress = `${locationFormData.dropAddress}, ${locationFormData.dropCity}, ${locationFormData.dropState} - ${locationFormData.dropPostalCode}`;
 
@@ -140,7 +164,7 @@ const FormContextProvider = ({ children }) => {
     };
 
     return (
-        <FormContext.Provider value={{ locationFormData, setLocationFormData, itemFormData, setItemFormData, auction, setAuctionData, creatauction, locationErrors, setLocationErrors }}>
+        <FormContext.Provider value={{ locationFormData, setLocationFormData, itemFormData, setItemFormData, auction, setAuctionData, creatauction, Errors, setErrors,itemErrors, setItemErrors, steps }}>
             {children}
         </FormContext.Provider>
     );

@@ -7,16 +7,12 @@ import CreateItem from './CreateItem';
 import AuctionForm from './AuctionForm';
 
 const CreateLocation = () => {
-    const steps = [
-        <CreateLocation />,
-        <CreateItem />,
-        <AuctionForm />
-      ];
+    const { locationFormData, setLocationFormData, Errors, setErrors, steps } = useFormState();
+    
       const { currentStep, step, back, next} = useMultiStepForm(steps);
     const { user } = userState();
-    const { locationFormData, setLocationFormData, locationErrors } = useFormState();
    
-    const [errors, setErrors] = useState({});
+    // const [errors, setErrors] = useState({});
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -33,8 +29,8 @@ const CreateLocation = () => {
     };
 
     useEffect(()=>{
-        console.log(locationErrors);
-    },[locationErrors]);
+        console.log(Errors);
+    },[Errors]);
 
     return (
         <Box component="form" sx={{ p: 3 }}>
@@ -52,8 +48,8 @@ const CreateLocation = () => {
                         onChange={handleChange}
                         fullWidth
                         required
-                        error={!!locationErrors.pickupAddress}
-                        helperText={locationErrors.pickupAddress}
+                        error={Errors.pickupAddress?!!Errors.pickupAddress:false}
+                        helperText={Errors.pickupAddress}
                     />
                 </Grid>
 
@@ -65,8 +61,8 @@ const CreateLocation = () => {
                         onChange={handleChange}
                         fullWidth
                         required
-                        error={!!locationErrors.pickupCity}
-                        helperText={locationErrors.pickupCity}
+                        error={!!Errors.pickupCity}
+                        helperText={Errors.pickupCity}
                         
                     />
                 </Grid>
@@ -78,8 +74,8 @@ const CreateLocation = () => {
                         value={locationFormData.pickupState}
                         onChange={handleChange}
                         fullWidth
-                        error={!!locationErrors.pickupState}
-                        helperText={locationErrors.pickupState}
+                        error={!!Errors.pickupState}
+                        helperText={Errors.pickupState}
                     />
                 </Grid>
 
@@ -89,8 +85,8 @@ const CreateLocation = () => {
                         name="pickupPostalCode"
                         value={locationFormData.pickupPostalCode}
                         onChange={handleChange}
-                        error={!!locationErrors.pickupPostalCode}
-                        helperText={locationErrors.pickupPostalCode}
+                        error={!!Errors.pickupPostalCode}
+                        helperText={Errors.pickupPostalCode}
                         fullWidth
                     />
                 </Grid>
@@ -108,8 +104,8 @@ const CreateLocation = () => {
                         onChange={handleChange}
                         fullWidth
                         required
-                        error={!!locationErrors.dropAddress}
-                        helperText={locationErrors.dropAddress}
+                        error={!!Errors.dropAddress}
+                        helperText={Errors.dropAddress}
                     />
                 </Grid>
 
@@ -121,8 +117,8 @@ const CreateLocation = () => {
                         onChange={handleChange}
                         fullWidth
                         required
-                        error={!!locationErrors.dropCity}
-                        helperText={locationErrors.dropCity}
+                        error={!!Errors.dropCity}
+                        helperText={Errors.dropCity}
                     />
                 </Grid>
 
@@ -131,9 +127,9 @@ const CreateLocation = () => {
                         label="State"
                         name="dropState"
                         value={locationFormData.dropState}
-                        error={!!locationErrors.dropState}
+                        error={!!Errors.dropState}
                         onChange={handleChange}
-                        helperText={locationErrors.dropState}
+                        helperText={Errors.dropState}
                         fullWidth
                     />
                 </Grid>
@@ -143,8 +139,8 @@ const CreateLocation = () => {
                         label="Postal Code"
                         name="dropPostalCode"
                         value={locationFormData.dropPostalCode}
-                        error={!!locationErrors.dropPostalCode}
-                        helperText={locationErrors.dropPostalCode}
+                        error={!!Errors.dropPostalCode}
+                        helperText={Errors.dropPostalCode}
                         onChange={handleChange}
                         fullWidth
                     />

@@ -4,8 +4,8 @@ import { useFormState } from "../src/context/FormContextProvide";
 export function useMultiStepForm(steps) {
     const [currentStep, setCurrentStep] = useState(0);
     const [valid, setValid] = useState(true);
-    const { locationFormData } = useFormState();
-    const {locationErrors,setLocationErrors}= useFormState();
+    
+    const {locationFormData,Errors,setErrors,itemFormData,}= useFormState();
 
     function next() {
         // console.log('next triggered');
@@ -28,12 +28,28 @@ export function useMultiStepForm(steps) {
                 }
             });
 
-            if (Object.keys(newErrors).length > 0) {
-                setLocationErrors(newErrors); 
-                return;
-            }
+            
+        }else if(currentStep==1){
+            const requiredFields = [
+                'height',
+                'length',
+                'width',
+                'weight',
+                'category',
+                'subCategory',
+                
+            ];
+            requiredFields.forEach((field)=>{
+                if(!itemFormData[field]){
+                    newErrors[field]='This field is required'
+                }
+            });
+            
         }
-
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors); 
+            return;
+        }
       
             setCurrentStep(i => {
                 if (i >= steps.length - 1) return i;
@@ -42,8 +58,8 @@ export function useMultiStepForm(steps) {
         
     }
     useEffect(()=>{
-        console.log(locationErrors);
-    },[locationErrors])
+        console.log(Errors);
+    },[Errors])
 
     function back() {
         setCurrentStep(i => {
@@ -65,6 +81,6 @@ export function useMultiStepForm(steps) {
         next,
         back,
         goto,
-        locationErrors 
+        
     };
 }

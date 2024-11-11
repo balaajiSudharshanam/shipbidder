@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
-import { TextField, Button, Box, Grid, Typography } from '@mui/material';
+import { TextField, Button, Box, Grid, Typography, Grid2 } from '@mui/material';
 import { userState } from '../context/UserContextProvider';
 import { useFormState } from '../context/FormContextProvide';
 
 const AuctionForm = () => {
     const { user } = userState();
-    const { auction, setAuctionData } = useFormState();
+    const { auction, setAuctionData, Errors, setErrors } = useFormState();
 
     
     useEffect(() => {
@@ -32,7 +32,7 @@ const AuctionForm = () => {
             
             
             <Grid container spacing={2}>
-                <Grid item xs={12}>
+                <Grid item xs={6}>
                     <TextField
                         label="Job Title"
                         name="jobTitle"
@@ -40,9 +40,23 @@ const AuctionForm = () => {
                         onChange={handleChange}
                         fullWidth
                         required
+                        error={Errors.jobTitle}
+                        helperText={Errors.jobTitle}
                     />
+                    
                 </Grid>
-
+                <Grid2 item xs={6}>
+                <TextField
+                    label="Budget"
+                    name="budget"
+                    value={auction.budget}
+                    onChange={handleChange}
+                    fullWidth
+                    required
+                    error={Errors.budget}
+                        helperText={Errors.budget}
+                    />
+                </Grid2>
                 <Grid item xs={12}>
                     <TextField
                         label="Job Description"
@@ -64,6 +78,8 @@ const AuctionForm = () => {
                         onChange={handleChange}
                         fullWidth
                         required
+                        error={Errors.pickupDateTime}
+                        helperText={Errors.pickupDateTime}
                         InputLabelProps={{
                             shrink: true,
                         }}
@@ -79,6 +95,8 @@ const AuctionForm = () => {
                         onChange={handleChange}
                         fullWidth
                         required
+                        error={Errors.dropDateTime}
+                        helperText={Errors.dropDateTime}
                         InputLabelProps={{
                             shrink: true,
                         }}

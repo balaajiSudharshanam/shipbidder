@@ -14,10 +14,11 @@ const CreateAuction = ({ handleModal }) => {
   ];
   const labels=["Location", "Item Details", "Auction Details"]
   const { currentStep, step, back, next } = useMultiStepForm(steps);
-  const { creatauction } = useFormState();
+  const { creatauction, Errors, setErrors } = useFormState();
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
   const handleCreateAuction = async () => {
+    
     try {
       await creatauction();
       handleModal();
