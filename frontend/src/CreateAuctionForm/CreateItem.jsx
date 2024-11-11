@@ -9,7 +9,7 @@ import { useMultiStepForm } from '../../CustomHooks/useMultiStepForm';
 
 const CreateItem = () => {
     const { user } = userState();
-    const { itemFormData, setItemFormData } = useFormState();
+    const { itemFormData, setItemFormData, Errors, setErrors } = useFormState();
     const steps = [
         <CreateLocation />,
         <CreateItem />,
@@ -17,6 +17,7 @@ const CreateItem = () => {
       ];
       const { currentStep, step, back, next } = useMultiStepForm(steps);
     const [preview, setPreview] = useState(null); 
+      
 
     useEffect(() => {
         setItemFormData((prevData) => ({
@@ -73,6 +74,7 @@ const CreateItem = () => {
                                 accept="image/*"
                                 onChange={handleImageUpload}
                                 hidden
+                                
                             />
                         </Button>
                     </Box>
@@ -85,6 +87,8 @@ const CreateItem = () => {
                         value={itemFormData.height}
                         onChange={handleChange}
                         fullWidth
+                        error={!!Errors.height}
+                        helperText={Errors.height}
                         required
                     />
                 </Grid>
@@ -96,6 +100,8 @@ const CreateItem = () => {
                         value={itemFormData.length}
                         onChange={handleChange}
                         fullWidth
+                        error={!!Errors.length}
+                        helperText={Errors.length}
                         required
                     />
                 </Grid>
@@ -107,6 +113,8 @@ const CreateItem = () => {
                         value={itemFormData.width}
                         onChange={handleChange}
                         fullWidth
+                        error={!!Errors.width}
+                        helperText={Errors.width}
                         required
                     />
                 </Grid>
@@ -118,6 +126,8 @@ const CreateItem = () => {
                         value={itemFormData.weight}
                         onChange={handleChange}
                         fullWidth
+                        error={!!Errors.weight}
+                        helperText={Errors.weight}
                         required
                     />
                 </Grid>
@@ -129,6 +139,8 @@ const CreateItem = () => {
                         value={itemFormData.category}
                         onChange={handleChange}
                         fullWidth
+                        error={!!Errors.category}
+                        helperText={Errors.category}
                         required
                     />
                 </Grid>
@@ -140,6 +152,8 @@ const CreateItem = () => {
                         value={itemFormData.subCategory}
                         onChange={handleChange}
                         fullWidth
+                        error={!!Errors.subCategory}
+                        helperText={Errors.subCategory}
                     />
                 </Grid>
 
