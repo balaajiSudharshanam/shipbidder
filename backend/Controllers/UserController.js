@@ -1,12 +1,12 @@
 const User = require('../Model/UserModel');
 const asyncHandler = require('express-async-handler');
 const generateToken = require('../config/generateToken');
-const bcrypt = require('bcrypt');  // Corrected the import
+const bcrypt = require('bcrypt');  
 
-// Register a new user
+
 const registerUser = asyncHandler(async (req, res) => {
     const { name, email, password, role } = req.body;
-    
+    console.log(req);
     if (!name || !email || !password || !role) {
         res.status(400);
         throw new Error("Please enter all the fields");

@@ -1,5 +1,5 @@
-import { FormControl, Input, InputLabel, Box, Typography, Button } from '@mui/material';
-import React, { useContext, useState } from 'react';
+import { FormControl, Input, InputLabel, Box, Typography, Button, Snackbar, Alert } from '@mui/material';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { userState } from '../../context/UserContextProvider';
 import { useNavigate } from 'react-router';
@@ -7,27 +7,36 @@ import { useNavigate } from 'react-router';
 const Signup = () => {
   const [email, setEmail] = useState(''); 
   const [password, setPassword] = useState(''); 
-  const{user,setUser}=userState();
-  const navigate=useNavigate();
+  const { user, setUser } = userState();
+  const navigate = useNavigate();
+  const [openSnackbar, setOpenSnackbar] = useState(false); 
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [alertSeverity, setAlertSeverity] = useState('success');
+
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent default form submission
+    e.preventDefault();
     try {
       const response = await axios.post('http://localhost:3500/api/user/auth', {
         email,
         password,
       });
-      console.log(response);
       if (response) {
-        console.log(response);
         setUser(response.data);
-        console.log(user);
-        let path = user.role === 'provider' ? '/providerDash' : '/seekerDash';
+        let path = response.data.role === 'provider' ? '/provider' : '/seeker';
         navigate(path);
-        
+        setSnackbarMessage('Sign-in successful!');
+        setAlertSeverity('success');
       }
     } catch (error) {
-      console.log(error);
+      setSnackbarMessage('Login failed. Please check your credentials.');
+      setAlertSeverity('error');
+    } finally {
+      setOpenSnackbar(true); 
     }
+  };
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
   };
 
   return (
@@ -42,7 +51,7 @@ const Signup = () => {
             id="email"
             type="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)} // Attach the onChange to Input, not InputLabel
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
         </FormControl>
@@ -53,7 +62,7 @@ const Signup = () => {
             id="password"
             type="password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)} // Attach onChange to Input
+            onChange={(e) => setPassword(e.target.value)}
             required
           />
         </FormControl>
@@ -61,6 +70,17 @@ const Signup = () => {
           Sign In
         </Button>
       </Box>
+
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert onClose={handleCloseSnackbar} severity={alertSeverity} sx={{ width: '100%' }}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </>
   );
 };

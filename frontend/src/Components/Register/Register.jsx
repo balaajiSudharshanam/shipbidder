@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Button, FormControl, InputLabel, Input, MenuItem, Paper, Select, Typography, Grid } from '@mui/material';
 import axios from 'axios';
 import { styled } from '@mui/material/styles';
@@ -23,23 +23,29 @@ const Register = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [role, setRole] = useState('seeker');
     const [photo, setPhoto] = useState(null); // State to hold the file
-
+    useEffect(()=>{
+        console.log(photo);
+    },[photo]);
     const handleRegister = async (e) => {
         e.preventDefault();
         
         // Create a form data object to handle file upload
-        const formData = new FormData();
-        formData.append('name', name);
-        formData.append('email', email);
-        formData.append('password', password);
-        formData.append('role', role);
-        formData.append('photo', photo); 
+        const formData={
+            name,
+            email,
+            password,
+            role,
+            photo
+        }
 
         try {
-            const response = await axios.post('http://localhost:3500/api/user', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
+          
+            const response = await axios.post('http://localhost:3500/api/user', {
+                name,
+                email,
+                password,
+                role,
+                photo
             });
             
             if (response) {

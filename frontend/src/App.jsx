@@ -6,6 +6,8 @@ import HomePage from './Pages/HomePage';
 import ContactPage from './Pages/ContactPage';
 import Login from './Pages/Login';
 import ServicePage from './Pages/ServicePage';
+import SeekerDash from './Pages/SeekerDash';
+import ProviderDashBoard from './Pages/ProviderDashBoard';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -17,6 +19,9 @@ function App() {
       <Route path='/contact' element={<ContactPage/>}/>
       <Route path='/login' element={<Login/>}/>
       <Route path='/service' element={<ServicePage/>}/>
+      <Route path='/seeker' element={<SeekerDash/>}/>
+      <Route path='/provider' element={<ProviderDashBoard/>}/>
+      
       </Routes>
         
     </div>
