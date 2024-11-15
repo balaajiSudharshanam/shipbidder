@@ -1,7 +1,8 @@
 const Auction = require('../Model/AuctionModel');
 const User=require('../Model/UserModel');
 const asyncHandler = require('express-async-handler');
-
+const { getIO } = require('../Socket/socket');
+// const {io} =require('../index');
 const createAuction = asyncHandler(async (req, res) => {
   const {
     jobTitle,
@@ -42,7 +43,14 @@ const createAuction = asyncHandler(async (req, res) => {
     .populate('dropLocation', 'longitude latitude')
     .populate('item');
 
+
+  //   io.to(jobProvider).emit('auctionUpdated',populatedAuction);
+  // return res.status(201).json(populatedAuction)
+
+  const io=getIO();
+  io.to(jobProvider).emit('auctioinCreated',populatedAuction);
   return res.status(201).json(populatedAuction)
+  
   }else{
     return res.sendStatus(403).json({message:"Only Employer can create an auction"})
   }
