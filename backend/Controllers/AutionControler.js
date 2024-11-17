@@ -15,12 +15,12 @@ const createAuction = asyncHandler(async (req, res) => {
     dropDateTime
   } = req.body;
 
-  // Validate required fields
+  
   if (!jobTitle || !jobProvider || !pickupLocation || !dropLocation || !item || !pickupDateTime || !dropDateTime) {
     return res.status(400).json({ message: 'Please provide all required fields' });
   }
 
-  // Create auction
+  
   
    const user=  await User.findById(jobProvider);
    
@@ -75,13 +75,14 @@ const getEmployerAuctions = asyncHandler(async (req, res) => {
   res.json(auctions);
 });
 const getFilteredAuctions = asyncHandler(async (req, res) => {
-  const { jobTitle, category, minPrice, maxPrice, status, page = 1, limit = 10 } = req.query;
+  const { jobTitle, category, location, status, page = 1, limit = 10 } = req.query;
 
   const filter = {};
   if (jobTitle) filter.jobTitle = { $regex: jobTitle, $options: 'i' };
   if (category) filter['item.category'] = category;
   if (status) filter.status = status;
-  if (minPrice || maxPrice) filter['item.price'] = { ...(minPrice && { $gte: minPrice }), ...(maxPrice && { $lte: maxPrice }) };
+  if(location) filter.location=location;
+  
 
   const auctions = await Auction.find(filter)
     .skip((page - 1) * limit)

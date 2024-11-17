@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, FormControl, InputLabel, Input, MenuItem, Paper, Select, Typography, Grid } from '@mui/material';
+import { Box, Button, FormControl, InputLabel, Input, MenuItem, Paper, Select, Typography, Grid, Modal } from '@mui/material';
 import axios from 'axios';
 import { styled } from '@mui/material/styles';
 import AddIcon from '@mui/icons-material/Add';
@@ -22,10 +22,9 @@ const Register = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [role, setRole] = useState('seeker');
-    const [photo, setPhoto] = useState(null); // State to hold the file
-    useEffect(()=>{
-        console.log(photo);
-    },[photo]);
+    const [photo, setPhoto] = useState(null); 
+    const[modalStatus,setModalStatus]=useState(close);
+   
     const handleRegister = async (e) => {
         e.preventDefault();
         
@@ -53,6 +52,9 @@ const Register = () => {
             }
         } catch (error) {
             console.log(error);
+
+        }finally{
+            setModalStatus(open);
         }
     };
 
@@ -149,6 +151,9 @@ const Register = () => {
                     </Grid>
                 </Grid>
             </Box>
+            {/* <Modal open={modalStatus} onClose={()=>setModalStatus(false)}>
+                Failed to register user
+            </Modal> */}
         </>
     );
 };
