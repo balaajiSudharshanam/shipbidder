@@ -1,12 +1,15 @@
 import React, { useEffect } from 'react';
 import MenuBar from '../Components/MenuBar/MenuBar';
 import { useNavigate } from 'react-router';
+
+
 import { userState } from '../context/UserContextProvider';
+import AuctionList from '../Components/AuctionList';
+
 
 const SeekerDash = () => {
   const navigate = useNavigate();
-  const { user } = userState(); // Get user state from context
-
+  const { user } = userState();
   useEffect(() => {
     
     if (!user || user.role !== 'seeker') {
@@ -17,7 +20,7 @@ const SeekerDash = () => {
   return (
     <div>
       <MenuBar />
-      <h1>Seeker Dashboard</h1>
+      <AuctionList/>
     </div>
   );
 };
