@@ -8,6 +8,7 @@ import Login from './Pages/Login';
 import ServicePage from './Pages/ServicePage';
 import SeekerDash from './Pages/SeekerDash';
 import ProviderDashBoard from './Pages/ProviderDashBoard';
+import AuctionPage from './Pages/AuctionPage';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -21,6 +22,7 @@ function App() {
       <Route path='/service' element={<ServicePage/>}/>
       <Route path='/seeker' element={<SeekerDash/>}/>
       <Route path='/provider' element={<ProviderDashBoard/>}/>
+      <Route path='/auction/:auctionId' element={<AuctionPage/>}/>
       
       </Routes>
         
