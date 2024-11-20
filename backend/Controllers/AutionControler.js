@@ -58,6 +58,20 @@ const createAuction = asyncHandler(async (req, res) => {
   // Re-fetch the auction to allow population
   ; 
 });
+const getAuctionById=asyncHandler(async(req,res)=>{
+  const{auctionId}=req.params;
+  if(!auctionId){
+    json({ message: 'please provide auctionID' });
+  }
+  const auction=await Auction.find({_id:auctionId});
+  if (!auction ) {
+    return res.status(404).json({ message: 'No auctions found f' });
+  }
+  console.log(auction);
+  res.json(auction);
+
+  
+})
 const getEmployerAuctions = asyncHandler(async (req, res) => {
   const { employerId } = req.params; 
 
@@ -95,4 +109,4 @@ const getFilteredAuctions = asyncHandler(async (req, res) => {
   res.json({ page, limit, total: auctions.length, auctions });
 });
 
-module.exports = { createAuction, getEmployerAuctions,getFilteredAuctions};
+module.exports = { createAuction, getEmployerAuctions,getFilteredAuctions, getAuctionById};

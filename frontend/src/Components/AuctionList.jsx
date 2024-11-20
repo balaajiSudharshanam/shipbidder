@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Card, Input, InputLabel, Box, Typography, Grid, ImageList, ImageListItem, ImageListItemBar, CircularProgress } from '@mui/material';
 import { userState } from '../context/UserContextProvider';
+import { Link } from 'react-router-dom';
 
 const AuctionList = () => {
   const { user } = userState();
@@ -111,8 +112,8 @@ const AuctionList = () => {
             <ImageList >
           {auctions.length > 0 ? (
             auctions.map((auction) => (
-           
-            <ImageListItem key={auction._id}>
+           <Link to={`/auction/${auction._id}`} key={auction._id} style={{ textDecoration: 'none' }}>
+            <ImageListItem key={auction._id} >
             <img
               srcSet={`${auction.item.pic}?w=248&fit=crop&auto=format&dpr=2 2x`}
               src={`${auction.item.pic}?w=248&fit=crop&auto=format&dpr=2 2x`}
@@ -126,6 +127,7 @@ const AuctionList = () => {
               position="below"
             />
           </ImageListItem>
+          </Link>
 
             ))
         ) : (

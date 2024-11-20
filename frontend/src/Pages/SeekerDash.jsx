@@ -22,7 +22,7 @@ const SeekerDash = () => {
     <div>
       <MenuBar />
       <AuctionList/>
-      <AuctionList/>
+      
     </div>
   );
 };
