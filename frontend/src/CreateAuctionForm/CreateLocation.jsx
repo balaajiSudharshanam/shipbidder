@@ -21,7 +21,7 @@ const CreateLocation = () => {
             [name]: value,
         }));
 
-        
+         
         setErrors((prevErrors) => ({
             ...prevErrors,
             [name]: value ? '' : prevErrors[name]

@@ -8,6 +8,7 @@ const UserRoutes=require('./routes/UserRoutes');
 const AutionRoutes=require('./routes/AuctionRoutes');
 const LocationRoutes=require('./routes/LocationRoutes');
 const ItemRoutes=require('./routes/ItemRoutes');
+const BidRoutes=require('./routes/BidRoutes');
 const { initSocket } = require('./Socket/socket');
 
 app.use(express.json());
@@ -18,6 +19,7 @@ app.use('/api/user',UserRoutes);
 app.use('/api/auction',AutionRoutes);
 app.use('/api/location',LocationRoutes);
 app.use('/api/item',ItemRoutes);
+app.use('/api/bid',BidRoutes);
 
 const port=process.env.PORT||3500;
 
