@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from 'react';
-
+import { userState } from '../../context/UserContextProvider';
 import axios from 'axios';
-import { Card, Input, InputLabel, Box, Typography, Grid, ImageList, ImageListItem, ImageListItemBar, CircularProgress } from '@mui/material';
-import { userState } from '../context/UserContextProvider';
-import { Link } from 'react-router-dom';
+import { Card, Input, InputLabel, Box, Typography, Grid, ImageList, ImageListItem, ImageListItemBar } from '@mui/material';
 
 const AuctionList = () => {
   const { user } = userState();
   const [auctions, setAuctions] = useState([]);
-  const[loading,setLoading]=useState(false);
   const [filter, setFilter] = useState({
     jobTitle: '',
     category: '',
@@ -32,14 +29,12 @@ const AuctionList = () => {
             Authorization: `Bearer ${user.token}`,
           },
         };
-        setLoading(true);
         const response = await axios.get('http://localhost:3500/api/auction', {
           params: { ...filter },
           ...config,
         });
         setAuctions(response.data.auctions || []);
         console.log(auctions);
-        setLoading(false);
       } catch (e) {
         console.log("Error fetching auctions:", e.message);
       }
@@ -112,8 +107,8 @@ const AuctionList = () => {
             <ImageList >
           {auctions.length > 0 ? (
             auctions.map((auction) => (
-           <Link to={`/auction/${auction._id}`} key={auction._id} style={{ textDecoration: 'none' }}>
-            <ImageListItem key={auction._id} >
+           
+            <ImageListItem key={auction._id}>
             <img
               srcSet={`${auction.item.pic}?w=248&fit=crop&auto=format&dpr=2 2x`}
               src={`${auction.item.pic}?w=248&fit=crop&auto=format&dpr=2 2x`}
@@ -127,12 +122,10 @@ const AuctionList = () => {
               position="below"
             />
           </ImageListItem>
-          </Link>
 
             ))
         ) : (
-            // <Typography variant="body1">No auctions found</Typography>
-            <CircularProgress/>
+            <Typography variant="body1">No auctions found</Typography>
         )}
        
         </ImageList>

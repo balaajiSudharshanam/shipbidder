@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router';
 
 
 import { userState } from '../context/UserContextProvider';
+
 import AuctionList from '../Components/AuctionList';
 
 
@@ -21,6 +22,7 @@ const SeekerDash = () => {
     <div>
       <MenuBar />
       <AuctionList/>
+      
     </div>
   );
 };
