@@ -27,14 +27,14 @@ const BidForm = ({ auctionId, userId, onClose }) => {
             );
 
             if (response) {
-                setSuccess(true); // Set success state
-                setError(null); // Clear any errors
+                setSuccess(true); 
+                setError(null); 
                 if (onClose) {
-                    onClose(); // Close modal or parent component action
+                    onClose(); 
                 }
             }
         } catch (e) {
-            setError("Failed to place the bid. Please try again."); // Set error message
+            setError("Failed to place the bid. Please try again."); 
             setSuccess(false);
         }
     };
