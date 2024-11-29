@@ -8,6 +8,8 @@ const ProviderWidget = () => {
     const { user } = userState();
     const [auctionData, setAuctionData] = useState([]);
     const [completedAuction,setCompletedAuction]=useState(0);
+    const [openAuction,setOpenAuction]=useState(0);
+
     const[socketConnected,setSocketConnected]=useState(false);
 
     useEffect(() => {
@@ -33,9 +35,13 @@ const ProviderWidget = () => {
        
     }, [user]);
     useEffect(() => {
-        const countCompletedAuctions = auctionData.filter(auction => auction.status === 'Open').length;
+        const countCompletedAuctions = auctionData.filter(auction => auction.status === 'Close').length;
         setCompletedAuction(countCompletedAuctions);
         console.log(completedAuction)
+
+        const countOpenAuctions=auctionData.filter(auction=>auction.status=='Open').length;
+        setOpenAuction(countOpenAuctions);
+
     }, [auctionData]);
     useEffect(()=>{
         const socket = io('http://localhost:3500');
@@ -69,10 +75,19 @@ const ProviderWidget = () => {
                 <Card sx={{ p: 2, minWidth: 150 }}>
                     <Typography variant="h6">Open Auctions</Typography>
                     <Typography variant="body1">
+                        {openAuction}
+                    </Typography>
+                </Card>
+            </Grid2>
+            <Grid2 item>
+                <Card sx={{ p: 2, minWidth: 150 }}>
+                    <Typography variant="h6">Completed Auctions</Typography>
+                    <Typography variant="body1">
                         {completedAuction}
                     </Typography>
                 </Card>
             </Grid2>
+            
         </Grid2>
     );
 };

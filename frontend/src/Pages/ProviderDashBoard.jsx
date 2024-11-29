@@ -4,6 +4,7 @@ import ProviderWidget from '../Components/ProviderWidget/ProviderWidget';
 import SideDrawer from '../Components/SideDrawer/SideDrawer';
 import { Grid, Modal, Box } from '@mui/material';
 import CreateAuction from '../CreateAuctionForm/CreateAuction';
+import AuctionListEmployer from '../Components/AuctionListEmployer/AuctionListEmployer';
 
 
 const ProviderDashBoard = () => {
@@ -23,13 +24,14 @@ const ProviderDashBoard = () => {
           <SideDrawer handleModal={handleModal} />
         </Grid>
 
-        {/* Main Content Area for Provider Widget */}
+        
         <Grid item xs={10} sx={{ mt: 2 }}>
           <ProviderWidget />
+          <AuctionListEmployer />
         </Grid>
       </Grid>
 
-      {/* Modal outside of SideDrawer */}
+      
       <Modal open={openModal} 
       onClose={handleModal}>
         <Box sx={{
