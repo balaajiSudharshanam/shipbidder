@@ -3,15 +3,14 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { userState } from '../context/UserContextProvider';
 
-const BidForm = ({ auctionId, userId, onClose }) => {
+const BidForm = ({  auction, bidder, onClose }) => {
     const { user } = userState();
-    const [amount, setAmount] = useState('');
+    const [bidAmount, setAmount] = useState('');
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(false);
 
     const handleSubmit = async (e) => {
-        e.preventDefault(); // Prevent the default form submission behavior
-
+        e.preventDefault();
         const config = {
             headers: {
                 "Content-type": "application/json",
@@ -22,25 +21,26 @@ const BidForm = ({ auctionId, userId, onClose }) => {
         try {
             const response = await axios.post(
                 'http://localhost:3500/api/bid',
-                { auctionId, userId, amount },
+                { auction, bidder, bidAmount },
                 config
             );
 
             if (response) {
-                setSuccess(true); 
-                setError(null); 
+                setSuccess(true);
+                setError(null);
+                setAmount(''); // Reset the form
                 if (onClose) {
-                    onClose(); 
+                    onClose(); // Close the modal
                 }
             }
         } catch (e) {
-            setError("Failed to place the bid. Please try again."); 
+            setError("Failed to place the bid. Please try again.");
             setSuccess(false);
         }
     };
 
     return (
-        <div>
+        <Box>
             <Typography variant="h5" mb={2}>Place Your Bid</Typography>
             <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                 {error && <Alert severity="error">{error}</Alert>}
@@ -51,7 +51,7 @@ const BidForm = ({ auctionId, userId, onClose }) => {
                     <Input
                         id="bid"
                         type="number"
-                        value={amount}
+                        value={bidAmount}
                         onChange={(e) => setAmount(e.target.value)}
                         required
                     />
@@ -61,7 +61,7 @@ const BidForm = ({ auctionId, userId, onClose }) => {
                     Place Bid
                 </Button>
             </Box>
-        </div>
+        </Box>
     );
 };
 
