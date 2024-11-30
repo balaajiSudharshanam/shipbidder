@@ -5,6 +5,7 @@ import './index.css'
 import UserContext from './context/UserContextProvider.jsx'
 import { BrowserRouter } from 'react-router-dom'
 import FormContextProvider from './context/FormContextProvide.jsx'
+import MenuBar from './Components/MenuBar/MenuBar.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -12,7 +13,7 @@ createRoot(document.getElementById('root')).render(
     <UserContext>
       <FormContextProvider>
 
-
+  
     <App />
       </FormContextProvider>
     </UserContext>

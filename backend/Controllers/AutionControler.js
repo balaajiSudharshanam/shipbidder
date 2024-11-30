@@ -55,23 +55,35 @@ const createAuction = asyncHandler(async (req, res) => {
     return res.sendStatus(403).json({message:"Only Employer can create an auction"})
   }
 
-  // Re-fetch the auction to allow population
-  ; 
-});
-const getAuctionById=asyncHandler(async(req,res)=>{
-  const{auctionId}=req.params;
-  if(!auctionId){
-    json({ message: 'please provide auctionID' });
-  }
-  const auction=await Auction.find({_id:auctionId});
-  if (!auction ) {
-    return res.status(404).json({ message: 'No auctions found f' });
-  }
-  console.log(auction);
-  res.json(auction);
-
+ 
   
-})
+});
+const getAuctionById = asyncHandler(async (req, res) => {
+  const { auctionId } = req.params;
+
+  if (!auctionId) {
+    return res.status(400).json({ message: 'Please provide auctionID' });
+  }
+
+  const auction = await Auction.findById(auctionId)
+    .populate('item')
+    .populate('pickupLocation')
+    .populate('dropLocation')
+    .populate({
+      path: 'bids',
+      populate: {
+        path: 'bidder',
+        select: 'name email', 
+      },
+    });
+
+  if (!auction) {
+    return res.status(404).json({ message: 'Auction not found' });
+  }
+console.log(auction);
+  res.json(auction);
+});
+
 const getEmployerAuctions = asyncHandler(async (req, res) => {
   const { employerId } = req.params; 
 

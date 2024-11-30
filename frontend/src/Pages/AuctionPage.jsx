@@ -1,9 +1,10 @@
-import { Card, CircularProgress, Typography, Box, Modal, Button } from '@mui/material';
+import { Card, CircularProgress, Typography, Box, Modal, Button, Grid } from '@mui/material';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { userState } from '../context/UserContextProvider';
 import BidForm from '../Components/BidForm';
+import MenuBar from '../Components/MenuBar/MenuBar';
 
 const AuctionPage = () => {
     const { user } = userState();
@@ -25,7 +26,7 @@ const AuctionPage = () => {
                 };
                 setLoading(true);
                 const response = await axios.get(`http://localhost:3500/api/auction/${auctionId}`, config);
-                setAuctionData(response.data[0]); // Assuming response is an array
+                setAuctionData(response.data);
             } catch (error) {
                 console.error('Error fetching auction data:', error);
             } finally {
@@ -39,32 +40,53 @@ const AuctionPage = () => {
     }, [auctionId, user]);
 
     return (
+        <>
+        <MenuBar/>
         <Box sx={{ p: 3 }}>
             {loading ? (
                 <CircularProgress />
             ) : auctionData ? (
                 <Card sx={{ p: 3 }}>
-                    <Typography variant="h5" mb={2}>
-                        {auctionData?.jobTitle || 'No Title'}
-                    </Typography>
-                    <Typography variant="body1" mb={1}>
-                        Description: {auctionData?.jobDescription || 'N/A'}
-                    </Typography>
-                    <Typography variant="body1" mb={1}>
-                        Budget: ${auctionData?.budget || 'N/A'}
-                    </Typography>
-                    <Typography variant="body1" mb={1}>
-                        Status: {auctionData?.status || 'N/A'}
-                    </Typography>
-                    <Typography variant="body1" mb={1}>
-                        Pickup Location: {auctionData?.pickupLocation?.address || 'N/A'}
-                    </Typography>
-                    <Typography variant="body1" mb={1}>
-                        Drop Location: {auctionData?.dropLocation?.address || 'N/A'}
-                    </Typography>
-                    <Button variant="contained" color="primary" onClick={handleOpen}>
-                        Place a Bid
-                    </Button>
+                    <Grid container spacing={2}>
+                        
+                        <Grid item xs={12} md={6}>
+                            <img
+                                src={auctionData.item?.pic || 'placeholder-image-url'}
+                                alt={auctionData?.jobTitle || 'Auction Item'}
+                                style={{
+                                    width: '50%',
+                                    height: 'auto',
+                                    borderRadius: '8px',
+                                    objectFit: 'cover',
+                                }}
+                            />
+                        </Grid>
+
+                        {/* Details Section */}
+                        <Grid item xs={12} md={6}>
+                            <Typography variant="h5" mb={2}>
+                                {auctionData?.jobTitle || 'No Title'}
+                            </Typography>
+                            <Typography variant="body1" mb={1}>
+                                Description: {auctionData?.jobDescription || 'N/A'}
+                            </Typography>
+                            <Typography variant="body1" mb={1}>
+                                Budget: ${auctionData?.budget || 'N/A'}
+                            </Typography>
+                            <Typography variant="body1" mb={1}>
+                                Status: {auctionData?.status || 'N/A'}
+                            </Typography>
+                            <Typography variant="body1" mb={1}>
+                                Pickup Location: {auctionData?.pickupLocation?.address || 'N/A'}
+                            </Typography>
+                            <Typography variant="body1" mb={1}>
+                                Drop Location: {auctionData?.dropLocation?.address || 'N/A'}
+                            </Typography>
+                            <Button variant="contained" color="primary" onClick={handleOpen}>
+                                Place a Bid
+                            </Button>
+                        </Grid>
+                    </Grid>
                 </Card>
             ) : (
                 <Typography variant="body1">No auction data found.</Typography>
@@ -76,6 +98,7 @@ const AuctionPage = () => {
                 </Box>
             </Modal>
         </Box>
+        </>
     );
 };
 

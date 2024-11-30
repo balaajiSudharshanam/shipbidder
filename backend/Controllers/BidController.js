@@ -25,7 +25,10 @@ const createBid = asyncHandler(async (req, res) => {
         bidAmount,
     });
 
-    
+    await Auction.findByIdAndUpdate(auction,
+        {$push:{bids: bid._id}},
+        {new:true,useFindAndModify:false}
+    )
     const populatedBid = await Bid.findById(bid._id)
         .populate('bidder', 'name email')
         .populate('auction', 'jobTitle');
