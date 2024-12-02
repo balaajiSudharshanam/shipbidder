@@ -92,7 +92,14 @@ const getEmployerAuctions = asyncHandler(async (req, res) => {
     .populate('jobProvider', 'name email') 
     .populate('pickupLocation', 'longitude latitude')
     .populate('dropLocation', 'longitude latitude')
-    .populate('item');
+    .populate('item')
+    .populate({
+      path: 'bids',
+      populate: {
+        path: 'bidder',
+        select: 'name email', 
+      },
+    });;
 
   if (!auctions || auctions.length === 0) {
     return res.status(404).json({ message: 'No auctions found for this employer' });
