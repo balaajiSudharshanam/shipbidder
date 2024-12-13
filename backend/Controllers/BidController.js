@@ -47,4 +47,27 @@ const getAuctionBids=asyncHandler(async(req,res)=>{
     const bids=await Bid.find({auction:auctionId}).populate('bidder','name email');
     return res.status(200).json(bids);
 })
-module.exports={createBid,getAuctionBids};
+
+const getUserBids = asyncHandler(async (req, res) => {
+    const { auctionId, userId } = req.query; 
+
+    
+    if (!auctionId || !userId) {
+        return res.status(400).json({ message: 'Both auctionId and userId are required.' });
+    }
+
+    try {
+        
+        const bids = await Bid.find({
+            auction: auctionId, 
+            bidder: userId
+        }).populate('bidder', 'name email') 
+          .populate('auction', 'jobTitle'); 
+        res.status(200).json(bids);
+    } catch (error) {
+        console.log(error);
+        console.error('Error fetching user bids:', error);
+        res.status(500).json({ message: 'An error occurred while fetching bids.' });
+    }
+});
+module.exports={createBid,getAuctionBids,getUserBids};

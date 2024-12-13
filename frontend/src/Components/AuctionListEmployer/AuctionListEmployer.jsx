@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 const AuctionListEmployer = () => {
   const [auctionList, setAuctionList] = useState([]);
-  const[bidPlaced,setBidPlace]=usestate(false);
+  const[bidPlaced,setBidPlace]=useState(false);
   const { user } = userState();
 
   const fetchAuction = async () => {
