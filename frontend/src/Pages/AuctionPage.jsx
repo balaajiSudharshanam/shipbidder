@@ -12,7 +12,7 @@ const AuctionPage = () => {
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
     const [auctionData, setAuctionData] = useState({});
-    const [bidPlace,setBidPlaced]=useState(false);
+    const [bidPlaced, setBidPlaced] = useState(false);
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -35,13 +35,30 @@ const AuctionPage = () => {
             }
         };
 
-        if (auctionId && user?.token) {
-            fetchAuctionData();
-            if (user.role === 'seeker') {
-                const hasPlacedBid = auctionData.bids.map(bid => bid.bidder._id === user.id);
-                setBidPlaced(hasPlacedBid);
+        fetchAuctionData();
+    }, [auctionId, user.token]);
+
+    useEffect(() => {
+        const fetchUserBid = async () => {
+            try {
+                const config = {
+                    headers: {
+                        Authorization: `Bearer ${user.token}`,
+                    },
+                };
+                const response = await axios.get(`http://localhost:3500/api/bid`, {
+                    params: { auctionId, userId: user.id },
+                    ...config,
+                });
                 
+                setBidPlaced(response.data.length > 0); 
+            } catch (error) {
+                console.error('Error fetching user bid:', error);
             }
+        };
+
+        if (user.role === 'seeker') {
+            fetchUserBid();
         }
     }, [auctionId, user]);
 
@@ -60,7 +77,7 @@ const AuctionPage = () => {
                                     src={auctionData.item?.pic || 'placeholder-image-url'}
                                     alt={auctionData?.jobTitle || 'Auction Item'}
                                     style={{
-                                        width: '50%',
+                                        width: '100%',
                                         height: 'auto',
                                         borderRadius: '8px',
                                         objectFit: 'cover',
@@ -89,8 +106,13 @@ const AuctionPage = () => {
                                     Drop Location: {auctionData?.dropLocation?.address || 'N/A'}
                                 </Typography>
                                 {user.role === 'seeker' ? (
-                                    <Button variant="contained" color="primary" onClick={handleOpen}>
-                                        Place a Bid
+                                    <Button
+                                        variant="contained"
+                                        disabled={bidPlaced}
+                                        color="primary"
+                                        onClick={handleOpen}
+                                    >
+                                        {bidPlaced ? 'Bid Placed' : 'Place a Bid'}
                                     </Button>
                                 ) : (
                                     <>
@@ -99,9 +121,9 @@ const AuctionPage = () => {
                                         </Typography>
                                         <Box
                                             sx={{
-                                                maxHeight: 300, // Fixed height for the bid list
-                                                overflowY: 'auto', // Scrollable if content exceeds height
-                                                border: '1px solid #ddd', // Optional: Border for better visuals
+                                                maxHeight: 300,
+                                                overflowY: 'auto',
+                                                border: '1px solid #ddd',
                                                 borderRadius: '8px',
                                                 p: 2,
                                                 backgroundColor: '#f9f9f9',
