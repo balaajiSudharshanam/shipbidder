@@ -8,4 +8,4 @@ so far the technologies used are
 4. material UI
 5. MongoDB
 
-im looking to integrate multiple modules. so far created a user module to handle user login and register
+im looking to integrate multiple modules. so far created a user module to handle user login and register and currently working in auction module.
