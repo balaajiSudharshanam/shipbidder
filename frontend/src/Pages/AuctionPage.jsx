@@ -5,6 +5,7 @@ import { useParams } from 'react-router';
 import { userState } from '../context/UserContextProvider';
 import BidForm from '../Components/BidForm';
 import MenuBar from '../Components/MenuBar/MenuBar';
+import MapComponent from '../Components/MapComponent/MapComponent';
 
 const AuctionPage = () => {
     const { user } = userState();
@@ -71,7 +72,7 @@ const AuctionPage = () => {
                 ) : auctionData ? (
                     <Card sx={{ p: 3 }}>
                         <Grid container spacing={2}>
-                            {/* Image Section */}
+                            
                             <Grid item xs={12} md={6}>
                                 <img
                                     src={auctionData.item?.pic || 'placeholder-image-url'}
@@ -82,10 +83,11 @@ const AuctionPage = () => {
                                         borderRadius: '8px',
                                         objectFit: 'cover',
                                     }}
-                                />
+                                    />
+                                    <MapComponent/>
                             </Grid>
 
-                            {/* Details Section */}
+                           
                             <Grid item xs={12} md={6}>
                                 <Typography variant="h5" mb={2}>
                                     {auctionData?.jobTitle || 'No Title'}
