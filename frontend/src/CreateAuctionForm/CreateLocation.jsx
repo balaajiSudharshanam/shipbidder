@@ -35,7 +35,7 @@ const CreateLocation = () => {
     return (
         <Box component="form" sx={{ p: 3 }}>
             <Grid container spacing={2}>
-                {/* Pickup Location Fields */}
+               
                 <Grid item xs={12}>
                     <Typography variant="h6">Pickup Location</Typography>
                 </Grid>
@@ -91,7 +91,7 @@ const CreateLocation = () => {
                     />
                 </Grid>
 
-                {/* Drop Location Fields */}
+                
                 <Grid item xs={12}>
                     <Typography variant="h6">Drop Location</Typography>
                 </Grid>
