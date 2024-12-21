@@ -6,14 +6,10 @@ import axios from 'axios';
 const MapComponent = ({ pickupLocation, droplocation }) => {
   const [routeCoordinates, setRouteCoordinates] = useState([]);
 
-    console.log(pickupLocation,droplocation);
-  const pickupPosition = pickupLocation && pickupLocation.lat && pickupLocation.long
-    ? [pickupLocation.lat, pickupLocation.long]
-    : null;
+    console.log("pickupLocation",pickupLocation,"droplocatoin:",droplocation);
+  const pickupPosition = [pickupLocation.lat, pickupLocation.long];
 
-  const dropPosition = droplocation && droplocation.lat && droplocation.long
-    ? [droplocation.lat, droplocation.long]
-    : null;
+  const dropPosition = [droplocation.lat, droplocation.long];
 
   useEffect(() => {
     const fetchRouteCoordinates = async () => {
@@ -21,9 +17,7 @@ const MapComponent = ({ pickupLocation, droplocation }) => {
         const apiKey = 'd3540bd1-d845-4c29-a663-235b97d384a6';
         const url = `https://graphhopper.com/api/1/route?profile=car&point=${pickupPosition.join(',')}&point=${dropPosition.join(',')}&calc_points=true&points_encoded=false&key=${apiKey}`;
         const response = await axios.get(url);
-        if (response.data.paths && response.data.paths[0]) {
-          setRouteCoordinates(response.data.paths[0].points.coordinates);
-        }
+       console.log(response);
       } catch (error) {
         console.error('Error fetching route coordinates:', error);
       }

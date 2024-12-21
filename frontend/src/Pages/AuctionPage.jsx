@@ -1,6 +1,6 @@
 import { Card, CircularProgress, Typography, Box, Modal, Button, Grid, List, ListItem } from '@mui/material';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { userState } from '../context/UserContextProvider';
 import BidForm from '../Components/BidForm';
@@ -14,8 +14,7 @@ const AuctionPage = () => {
     const [open, setOpen] = useState(false);
     const [auctionData, setAuctionData] = useState({});
     const [bidPlaced, setBidPlaced] = useState(false);
-    const [DropLocation, setDroplocation]=useState([]);
-    const [PickupLocation,setPickuplocation]=useState([]);
+    
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -34,10 +33,7 @@ const AuctionPage = () => {
     
                 
                
-                    if(response.data){
-                        setDroplocation(response.data.dropLocation.coordinates);
-                        setPickuplocation(response.data.pickupLocation.coordinates);
-                    }
+                    
                 
             } catch (error) {
                 console.error('Error fetching auction data:', error);
@@ -96,10 +92,11 @@ const AuctionPage = () => {
                                         objectFit: 'cover',
                                     }}
                                     />
-                                    <MapComponent
+                                    {auctionData.pickupLocation && <MapComponent
                                         pickupLocation={auctionData.pickupLocation.coordinates}
                                         droplocation={auctionData.dropLocation.coordinates}
-                                    />
+                                    />}
+                                    
                             </Grid>
 
                            
