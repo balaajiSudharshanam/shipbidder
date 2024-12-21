@@ -67,8 +67,8 @@ const getAuctionById = asyncHandler(async (req, res) => {
 
   const auction = await Auction.findById(auctionId)
     .populate('item')
-    .populate('pickupLocation')
-    .populate('dropLocation')
+    .populate('pickupLocation','coordinates')
+    .populate('dropLocation','coordinates')
     .populate({
       path: 'bids',
       populate: {

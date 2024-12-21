@@ -1,6 +1,6 @@
 import { Card, CircularProgress, Typography, Box, Modal, Button, Grid, List, ListItem } from '@mui/material';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { userState } from '../context/UserContextProvider';
 import BidForm from '../Components/BidForm';
@@ -14,6 +14,7 @@ const AuctionPage = () => {
     const [open, setOpen] = useState(false);
     const [auctionData, setAuctionData] = useState({});
     const [bidPlaced, setBidPlaced] = useState(false);
+    
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -29,16 +30,22 @@ const AuctionPage = () => {
                 setLoading(true);
                 const response = await axios.get(`http://localhost:3500/api/auction/${auctionId}`, config);
                 setAuctionData(response.data);
+    
+                
+               
+                    
+                
             } catch (error) {
                 console.error('Error fetching auction data:', error);
             } finally {
                 setLoading(false);
             }
         };
-
+    
         fetchAuctionData();
     }, [auctionId, user.token]);
-
+    
+    
     useEffect(() => {
         const fetchUserBid = async () => {
             try {
@@ -53,6 +60,7 @@ const AuctionPage = () => {
                 });
                 
                 setBidPlaced(response.data.length > 0); 
+                
             } catch (error) {
                 console.error('Error fetching user bid:', error);
             }
@@ -62,7 +70,7 @@ const AuctionPage = () => {
             fetchUserBid();
         }
     }, [auctionId, user]);
-
+    console.log(auctionData);
     return (
         <>
             <MenuBar />
@@ -84,7 +92,11 @@ const AuctionPage = () => {
                                         objectFit: 'cover',
                                     }}
                                     />
-                                    <MapComponent/>
+                                    {auctionData.pickupLocation && <MapComponent
+                                        pickupLocation={auctionData.pickupLocation.coordinates}
+                                        droplocation={auctionData.dropLocation.coordinates}
+                                    />}
+                                    
                             </Grid>
 
                            
