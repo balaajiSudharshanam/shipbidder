@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { TextField, Button, Box, Grid, Typography } from '@mui/material';
 import { userState } from '../context/UserContextProvider';
 import { useFormState } from '../context/FormContextProvide';
-import { useMultiStepForm } from '../../CustomHooks/useMultiStepForm';
+
 import CreateItem from './CreateItem';
-import AuctionForm from './AuctionForm';
+import { useMultiStepForm } from '../../CustomHooks/useMultiStepForm';
+
 
 const CreateLocation = () => {
     const { locationFormData, setLocationFormData, Errors, setErrors, steps } = useFormState();
