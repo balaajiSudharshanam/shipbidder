@@ -15,7 +15,7 @@ const createAuction = asyncHandler(async (req, res) => {
     dropDateTime
   } = req.body;
 
-  
+  console.log("auctio hit");
   if (!jobTitle || !jobProvider || !pickupLocation || !dropLocation || !item || !pickupDateTime || !dropDateTime) {
     return res.status(400).json({ message: 'Please provide all required fields' });
   }
