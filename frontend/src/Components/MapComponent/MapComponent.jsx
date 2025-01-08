@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { MapContainer, Marker, Popup, TileLayer, Polyline } from 'react-leaflet';
+import { MapContainer, Marker, Popup, TileLayer, Polyline, } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import axios from 'axios';
+import placeholderIcon from '../../assets/placeholder.png';
+import pickup from  '../../assets/pickup.png';
+
 
 const MapComponent = ({ pickupLocation, droplocation }) => {
   const [routeCoordinates, setRouteCoordinates] = useState([]);
@@ -9,6 +12,16 @@ const MapComponent = ({ pickupLocation, droplocation }) => {
   const pickupPosition = [pickupLocation.lng, pickupLocation.lat]; 
   const dropPosition = [droplocation.lng, droplocation.lat]; 
 
+  //getting the icons ready
+  
+ const  dropIcon=new L.Icon({
+  iconUrl: placeholderIcon,
+  iconSize:[35,45],
+ })
+ const  pickupIcon=new L.Icon({
+  iconUrl: pickup,
+  iconSize:[35,45],
+ })
   useEffect(() => {
     const fetchRouteCoordinates = async () => {
       try {
@@ -60,14 +73,14 @@ const MapComponent = ({ pickupLocation, droplocation }) => {
 
         {/* Pickup Marker */}
         {pickupPosition && (
-          <Marker position={[pickupLocation.lat, pickupLocation.lng]}>
+          <Marker position={[pickupLocation.lat, pickupLocation.lng]} icon={pickupIcon}>
             <Popup>Pickup Location</Popup>
           </Marker>
         )}
 
         {/* Drop Marker */}
         {dropPosition && (
-          <Marker position={[droplocation.lat, droplocation.lng]}>
+          <Marker position={[droplocation.lat, droplocation.lng]} icon={dropIcon}>
             <Popup>Drop Location</Popup>
           </Marker>
         )}
