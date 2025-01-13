@@ -6,6 +6,7 @@ import { userState } from '../context/UserContextProvider';
 import BidForm from '../Components/BidForm';
 import MenuBar from '../Components/MenuBar/MenuBar';
 import MapComponent from '../Components/MapComponent/MapComponent';
+import {io} from 'socket.io-client'
 
 const AuctionPage = () => {
     const { user } = userState();
@@ -70,7 +71,7 @@ const AuctionPage = () => {
             fetchUserBid();
         }
     }, [auctionId, user]);
-    console.log(auctionData);
+    // console.log(auctionData);
     return (
         <>
             <MenuBar />

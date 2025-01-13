@@ -19,7 +19,7 @@ const ProviderDashBoard = () => {
     <div>
       <MenuBar />
       <Grid container spacing={1}>
-        {/* Side Drawer with modal control passed as prop */}
+       
         <Grid item xs={2}>
           <SideDrawer handleModal={handleModal} />
         </Grid>

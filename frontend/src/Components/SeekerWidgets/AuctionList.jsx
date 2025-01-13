@@ -45,7 +45,7 @@ const AuctionList = () => {
 
   return (
     <Box>
-      {/* Filter Section */}
+     
       <Card sx={{ p: 2, mb: 2 }}>
         <Typography variant="h6" mb={2}>
           Filter Auctions
