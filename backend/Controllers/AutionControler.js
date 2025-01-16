@@ -127,5 +127,22 @@ const getFilteredAuctions = asyncHandler(async (req, res) => {
 
   res.json({ page, limit, total: auctions.length, auctions });
 });
+ 
+const closeOldAuctions=asyncHandler(async()=>{
+  try{
+    const threeDaysAgo=new Date();
+  threeDaysAgo.setDate(threeDaysAgo.getDate()-3);
 
-module.exports = { createAuction, getEmployerAuctions,getFilteredAuctions, getAuctionById};
+  const result=await Auction.updateMany(
+    {createdAt: {$lt:threeDaysAgo},status:{$ne:'closed'}},
+    {$set:{status:'Closed'}}
+
+    
+  );
+  // console.log(`Auctions Updated ${result}`);
+  }catch(error){
+    console.log('Error updating old auctions :', error);
+  }
+})
+
+module.exports = { createAuction, getEmployerAuctions,getFilteredAuctions, getAuctionById, closeOldAuctions};

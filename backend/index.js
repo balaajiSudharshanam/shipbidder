@@ -10,6 +10,10 @@ const LocationRoutes=require('./routes/LocationRoutes');
 const ItemRoutes=require('./routes/ItemRoutes');
 const BidRoutes=require('./routes/BidRoutes');
 const { initSocket } = require('./Socket/socket');
+const cron=require('node-cron');
+
+const shell=require('shelljs');
+const { closeOldAuctions } = require('./Controllers/AutionControler');
 
 app.use(express.json());
 connectDb();
@@ -43,3 +47,9 @@ io.on("connect",(socket)=>{
         socket.emit("connected");
     })
 });
+
+cron.schedule("* * * * * *",function(){
+    closeOldAuctions();
+})
+
+
