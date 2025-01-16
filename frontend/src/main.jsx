@@ -4,13 +4,18 @@ import App from './App.jsx'
 import './index.css'
 import UserContext from './context/UserContextProvider.jsx'
 import { BrowserRouter } from 'react-router-dom'
+import FormContextProvider from './context/FormContextProvide.jsx'
+import MenuBar from './Components/MenuBar/MenuBar.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
     <UserContext>
+      <FormContextProvider>
 
+  
     <App />
+      </FormContextProvider>
     </UserContext>
     </BrowserRouter>
   </StrictMode>,

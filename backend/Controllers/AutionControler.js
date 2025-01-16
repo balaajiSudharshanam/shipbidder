@@ -1,7 +1,8 @@
 const Auction = require('../Model/AuctionModel');
 const User=require('../Model/UserModel');
 const asyncHandler = require('express-async-handler');
-
+const { getIO } = require('../Socket/socket');
+// const {io} =require('../index');
 const createAuction = asyncHandler(async (req, res) => {
   const {
     jobTitle,
@@ -14,18 +15,16 @@ const createAuction = asyncHandler(async (req, res) => {
     dropDateTime
   } = req.body;
 
-  // Validate required fields
+  console.log("auctio hit");
   if (!jobTitle || !jobProvider || !pickupLocation || !dropLocation || !item || !pickupDateTime || !dropDateTime) {
     return res.status(400).json({ message: 'Please provide all required fields' });
   }
 
-  // Create auction
-  try{
-   const user= User.findById(jobProvider);
+  
+  
+   const user=  await User.findById(jobProvider);
    
-  }catch(e){
-    console.log(e);
-  }
+  
   if(user.role=="provider"){
     const auction = await Auction.create({
       jobTitle,
@@ -36,6 +35,7 @@ const createAuction = asyncHandler(async (req, res) => {
       item,
       pickupDateTime,
       dropDateTime
+
     });
     const populatedAuction = await Auction.findById(auction._id)
     .populate('jobProvider', 'name email')
@@ -43,14 +43,47 @@ const createAuction = asyncHandler(async (req, res) => {
     .populate('dropLocation', 'longitude latitude')
     .populate('item');
 
+
+  //   io.to(jobProvider).emit('auctionUpdated',populatedAuction);
+  // return res.status(201).json(populatedAuction)
+
+  const io=getIO();
+  io.to(jobProvider).emit('auctioinCreated',populatedAuction);
   return res.status(201).json(populatedAuction)
+  
   }else{
     return res.sendStatus(403).json({message:"Only Employer can create an auction"})
   }
 
-  // Re-fetch the auction to allow population
-  ; 
+ 
+  
 });
+const getAuctionById = asyncHandler(async (req, res) => {
+  const { auctionId } = req.params;
+
+  if (!auctionId) {
+    return res.status(400).json({ message: 'Please provide auctionID' });
+  }
+
+  const auction = await Auction.findById(auctionId)
+    .populate('item')
+    .populate('pickupLocation','coordinates')
+    .populate('dropLocation','coordinates')
+    .populate({
+      path: 'bids',
+      populate: {
+        path: 'bidder',
+        select: 'name email', 
+      },
+    });
+
+  if (!auction) {
+    return res.status(404).json({ message: 'Auction not found' });
+  }
+console.log(auction);
+  res.json(auction);
+});
+
 const getEmployerAuctions = asyncHandler(async (req, res) => {
   const { employerId } = req.params; 
 
@@ -59,7 +92,14 @@ const getEmployerAuctions = asyncHandler(async (req, res) => {
     .populate('jobProvider', 'name email') 
     .populate('pickupLocation', 'longitude latitude')
     .populate('dropLocation', 'longitude latitude')
-    .populate('item');
+    .populate('item')
+    .populate({
+      path: 'bids',
+      populate: {
+        path: 'bidder',
+        select: 'name email', 
+      },
+    });;
 
   if (!auctions || auctions.length === 0) {
     return res.status(404).json({ message: 'No auctions found for this employer' });
@@ -68,13 +108,14 @@ const getEmployerAuctions = asyncHandler(async (req, res) => {
   res.json(auctions);
 });
 const getFilteredAuctions = asyncHandler(async (req, res) => {
-  const { jobTitle, category, minPrice, maxPrice, status, page = 1, limit = 10 } = req.query;
+  const { jobTitle, category, location, status, page = 1, limit = 10 } = req.query;
 
   const filter = {};
   if (jobTitle) filter.jobTitle = { $regex: jobTitle, $options: 'i' };
   if (category) filter['item.category'] = category;
   if (status) filter.status = status;
-  if (minPrice || maxPrice) filter['item.price'] = { ...(minPrice && { $gte: minPrice }), ...(maxPrice && { $lte: maxPrice }) };
+  if(location) filter.location=location;
+  
 
   const auctions = await Auction.find(filter)
     .skip((page - 1) * limit)
@@ -87,4 +128,4 @@ const getFilteredAuctions = asyncHandler(async (req, res) => {
   res.json({ page, limit, total: auctions.length, auctions });
 });
 
-module.exports = { createAuction, getEmployerAuctions,getFilteredAuctions};
+module.exports = { createAuction, getEmployerAuctions,getFilteredAuctions, getAuctionById};
