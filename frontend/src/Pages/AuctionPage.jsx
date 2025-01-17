@@ -121,14 +121,32 @@ const AuctionPage = () => {
                                     Drop Location: {auctionData?.dropLocation?.address || 'N/A'}
                                 </Typography>
                                 {user.role === 'seeker' ? (
-                                    <Button
+                                    auctionData.status==='Open'?(<Button
                                         variant="contained"
                                         disabled={bidPlaced}
                                         color="primary"
                                         onClick={handleOpen}
                                     >
                                         {bidPlaced ? 'Bid Placed' : 'Place a Bid'}
-                                    </Button>
+                                    </Button>):(
+                                        <Typography
+                                        variant="contained" 
+                                        mb={2}
+                                        sx={{
+                                            color: 'white',
+                                            fontWeight: 'bold',
+                                            textAlign: 'center',
+                                            padding: '10px',
+                                            border: '3px solid red',
+                                            borderRadius: '8px',
+                                            backgroundColor: 'red',
+                                            boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.2)',
+                                        }}
+                                    >
+                                        Auction Closed
+                                    </Typography>
+                                    )
+                                    
                                 ) : (
                                     <>
                                         <Typography variant="h6" mb={1}>
