@@ -48,8 +48,8 @@ io.on("connect",(socket)=>{
     })
 });
 
-cron.schedule("* * * * * *",function(){
-    closeOldAuctions();
-})
+// cron.schedule("* * * * * *",function(){
+//     closeOldAuctions();
+// })
 
 
