@@ -18,6 +18,7 @@ const AuctionForm = () => {
     
     const handleChange = (e) => {
         const { name, value } = e.target;
+       console.log(name,value);
         setAuctionData((prevData) => ({
             ...prevData,
             [name]: value,

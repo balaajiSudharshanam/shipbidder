@@ -132,14 +132,25 @@ const closeOldAuctions=asyncHandler(async()=>{
   try{
     const threeDaysAgo=new Date();
   threeDaysAgo.setDate(threeDaysAgo.getDate()-3);
-
-  const result=await Auction.updateMany(
+// To fetch the auctions to be close
+  const auctionsToClose=await Auction.updateMany(
     {createdAt: {$lt:threeDaysAgo},status:{$ne:'closed'}},
-    {$set:{status:'Closed'}}
+    
 
     
-  );
-  // console.log(`Auctions Updated ${result}`);
+  ).populate('bids');
+
+  for(const auction of auctionsToClose){
+    if(auctions.bids.length>0){
+      let lowestBid =auction.bids.reduce((minBid,currentBid)=>
+        currentBid.bidAmount<minBid.bidAmount?currentBid:minBid
+      );
+      auction.won=lowestBid.bidder;
+    }
+    auctions.status='Closed'
+      await auction.save();
+  }
+  
   }catch(error){
     console.log('Error updating old auctions :', error);
   }
