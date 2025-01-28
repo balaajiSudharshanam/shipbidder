@@ -133,23 +133,37 @@ const closeOldAuctions=asyncHandler(async()=>{
     const threeDaysAgo=new Date();
   threeDaysAgo.setDate(threeDaysAgo.getDate()-3);
 // To fetch the auctions to be close
-  const auctionsToClose=await Auction.updateMany(
-    {createdAt: {$lt:threeDaysAgo},status:{$ne:'closed'}},
+  // const auctionsToClose=await Auction.updateMany(
+  //   {createdAt: {$lt:threeDaysAgo},status:{$ne:'closed'}},
     
 
     
-  ).populate('bids');
+  // ).populate('bids');
+
+  const auctionsToClose=await Auction.find({createdAt: {$lt:threeDaysAgo}}).populate('bids');
+  // console.log(auctionsToClose);
 
   for(const auction of auctionsToClose){
-    if(auctions.bids.length>0){
-      let lowestBid =auction.bids.reduce((minBid,currentBid)=>
-        currentBid.bidAmount<minBid.bidAmount?currentBid:minBid
-      );
-      auction.won=lowestBid.bidder;
+    if(auction.bids.length>0){
+          let lowestBid =auction.bids.reduce((minBid,currentBid)=>
+            currentBid.bidAmount<minBid.bidAmount?currentBid:minBid
+          );
+          auction.won=lowestBid.bidder;
     }
-    auctions.status='Closed'
-      await auction.save();
+    auction.status='Closed'
+    await auction.save();
+    // console.log(auction.won);
   }
+  // for(const auction of auctionsToClose){
+  //   if(auctions.bids.length>0){
+  //     let lowestBid =auction.bids.reduce((minBid,currentBid)=>
+  //       currentBid.bidAmount<minBid.bidAmount?currentBid:minBid
+  //     );
+  //     auction.won=lowestBid.bidder;
+  //   }
+  //   auctions.status='Closed'
+  //     await auction.save();
+  // }
   
   }catch(error){
     console.log('Error updating old auctions :', error);
