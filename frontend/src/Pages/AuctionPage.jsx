@@ -7,6 +7,7 @@ import BidForm from '../Components/BidForm';
 import MenuBar from '../Components/MenuBar/MenuBar';
 import MapComponent from '../Components/MapComponent/MapComponent';
 import {io} from 'socket.io-client'
+import WinnerCard from '../Components/WinnerCard/WinnerCard';
 
 const AuctionPage = () => {
     const { user } = userState();
@@ -44,6 +45,7 @@ const AuctionPage = () => {
         };
     
         fetchAuctionData();
+        console.log(auctionData);
     }, [auctionId, user.token]);
     
     
@@ -71,7 +73,7 @@ const AuctionPage = () => {
             fetchUserBid();
         }
     }, [auctionId, user]);
-    // console.log(auctionData);
+    console.log(auctionData);
     return (
         <>
             <MenuBar />
@@ -174,6 +176,9 @@ const AuctionPage = () => {
                                         </Box>
                                     </>
                                 )}
+                               {auctionData.status === 'Closed' && user.role === 'provider' && <WinnerCard />}
+
+                                
                             </Grid>
                         </Grid>
                     </Card>

@@ -35,7 +35,7 @@ const ProviderWidget = () => {
        
     }, [user]);
     useEffect(() => {
-        const countCompletedAuctions = auctionData.filter(auction => auction.status === 'Close').length;
+        const countCompletedAuctions = auctionData.filter(auction => auction.status === 'Closed').length;
         setCompletedAuction(countCompletedAuctions);
         console.log(completedAuction)
 
@@ -58,6 +58,9 @@ const ProviderWidget = () => {
                 setOpenAuctions((prev)=>prev+1);
             }
         })
+
+        
+
         return ()=>socket.disconnect();
     })
 
