@@ -7,6 +7,7 @@ import BidForm from '../Components/BidForm';
 import MenuBar from '../Components/MenuBar/MenuBar';
 import MapComponent from '../Components/MapComponent/MapComponent';
 import {io} from 'socket.io-client'
+import WinnerCard from '../Components/WinnerCard/WinnerCard';
 
 const AuctionPage = () => {
     const { user } = userState();
@@ -44,6 +45,7 @@ const AuctionPage = () => {
         };
     
         fetchAuctionData();
+        console.log(auctionData);
     }, [auctionId, user.token]);
     
     
@@ -71,7 +73,7 @@ const AuctionPage = () => {
             fetchUserBid();
         }
     }, [auctionId, user]);
-    // console.log(auctionData);
+    console.log(auctionData);
     return (
         <>
             <MenuBar />
@@ -99,7 +101,7 @@ const AuctionPage = () => {
                                     />}
                                     
                             </Grid>
-
+                            
                            
                             <Grid item xs={12} md={6}>
                                 <Typography variant="h5" mb={2}>
@@ -130,6 +132,7 @@ const AuctionPage = () => {
                                         {bidPlaced ? 'Bid Placed' : 'Place a Bid'}
                                     </Button>
                                 ) : (
+                                    
                                     <>
                                         <Typography variant="h6" mb={1}>
                                             Bids Received: {auctionData.bids?.length || 0}
@@ -174,6 +177,9 @@ const AuctionPage = () => {
                                         </Box>
                                     </>
                                 )}
+                               
+                               {auctionData.status === 'Closed' && user.role === 'provider' && <WinnerCard bidder={auctionData.won.bidder} bid={auctionData.won.bidAmount}/>}
+                                
                             </Grid>
                         </Grid>
                     </Card>

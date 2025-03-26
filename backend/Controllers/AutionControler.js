@@ -3,6 +3,8 @@ const User=require('../Model/UserModel');
 const asyncHandler = require('express-async-handler');
 const { getIO } = require('../Socket/socket');
 // const {io} =require('../index');
+
+// const io=getIo();
 const createAuction = asyncHandler(async (req, res) => {
   const {
     jobTitle,
@@ -75,6 +77,13 @@ const getAuctionById = asyncHandler(async (req, res) => {
         path: 'bidder',
         select: 'name email', 
       },
+    })
+    .populate({
+      path:'won',
+      populate:{
+        path:'bidder',
+        select:'name email'
+      }
     });
 
   if (!auction) {
@@ -132,38 +141,27 @@ const closeOldAuctions=asyncHandler(async()=>{
   try{
     const threeDaysAgo=new Date();
   threeDaysAgo.setDate(threeDaysAgo.getDate()-3);
-// To fetch the auctions to be close
-  // const auctionsToClose=await Auction.updateMany(
-  //   {createdAt: {$lt:threeDaysAgo},status:{$ne:'closed'}},
-    
 
-    
-  // ).populate('bids');
 
   const auctionsToClose=await Auction.find({createdAt: {$lt:threeDaysAgo}}).populate('bids');
-  // console.log(auctionsToClose);
+ 
 
   for(const auction of auctionsToClose){
+    
     if(auction.bids.length>0){
           let lowestBid =auction.bids.reduce((minBid,currentBid)=>
             currentBid.bidAmount<minBid.bidAmount?currentBid:minBid
           );
-          auction.won=lowestBid.bidder;
+          auction.won=lowestBid.id;
+          const io=getIO();
+    io.to(auction).emit('auctionClosed',lowestBid);
     }
     auction.status='Closed'
     await auction.save();
-    // console.log(auction.won);
+    
+    
   }
-  // for(const auction of auctionsToClose){
-  //   if(auctions.bids.length>0){
-  //     let lowestBid =auction.bids.reduce((minBid,currentBid)=>
-  //       currentBid.bidAmount<minBid.bidAmount?currentBid:minBid
-  //     );
-  //     auction.won=lowestBid.bidder;
-  //   }
-  //   auctions.status='Closed'
-  //     await auction.save();
-  // }
+  
   
   }catch(error){
     console.log('Error updating old auctions :', error);

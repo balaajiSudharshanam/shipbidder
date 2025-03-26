@@ -30,12 +30,7 @@ const port=process.env.PORT||3500;
 const server=app.listen(port,()=>{
     console.log(`app running on port : ${port}`);
 });
-// const io=require('socket.io')(server,{
-//     pingTimeout:60000,
-//     cors:{
-//         origin:"http://localhost:5173"
-//     },
-// });
+
 
 const io=initSocket(server);
 io.on("connect",(socket)=>{
@@ -48,9 +43,9 @@ io.on("connect",(socket)=>{
     })
 });
 
-cron.schedule("* * * * * *",function(){
+cron.schedule("* * * * * *",()=>{
     closeOldAuctions();
-    // console.log('Cron running');
+   
 })
 
 

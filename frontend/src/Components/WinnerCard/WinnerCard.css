@@ -1,0 +1,26 @@
+/* WinnerCard.css */
+.winner-card {
+    padding: 1rem;
+    border: 2px solid #4CAF50;
+    border-radius: 0.5rem;
+    background-color: #e8f5e9;
+    box-shadow: 0 4px 8px rgba(0, 128, 0, 0.2);
+    transition: transform 0.2s ease;
+    max-width: 300px;
+  }
+  
+  .winner-card:hover {
+    transform: scale(1.03);
+  }
+  
+  .winner-name {
+    font-weight: 600;
+    font-size: 1.25rem;
+    color: #2e7d32;
+  }
+  
+  .winner-bid {
+    font-size: 0.9rem;
+    color: #388e3c;
+  }
+  

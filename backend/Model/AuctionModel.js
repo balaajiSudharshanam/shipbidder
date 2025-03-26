@@ -14,7 +14,7 @@ const AuctionSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now },
     status: { type: String, default: 'Open' },
     budget:{type:Number,default: 100},
-    won:{type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false}
+    won:{type: mongoose.Schema.Types.ObjectId, ref: 'Bid', required: false}
   });
 const Auction=mongoose.model('Auction',AuctionSchema);
 module.exports= Auction;
