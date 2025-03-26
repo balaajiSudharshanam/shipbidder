@@ -77,6 +77,13 @@ const getAuctionById = asyncHandler(async (req, res) => {
         path: 'bidder',
         select: 'name email', 
       },
+    })
+    .populate({
+      path:'won',
+      populate:{
+        path:'bidder',
+        select:'name email'
+      }
     });
 
   if (!auction) {
@@ -145,7 +152,7 @@ const closeOldAuctions=asyncHandler(async()=>{
           let lowestBid =auction.bids.reduce((minBid,currentBid)=>
             currentBid.bidAmount<minBid.bidAmount?currentBid:minBid
           );
-          auction.won=lowestBid.bidder;
+          auction.won=lowestBid.id;
           const io=getIO();
     io.to(auction).emit('auctionClosed',lowestBid);
     }

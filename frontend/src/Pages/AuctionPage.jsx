@@ -101,7 +101,7 @@ const AuctionPage = () => {
                                     />}
                                     
                             </Grid>
-
+                            
                            
                             <Grid item xs={12} md={6}>
                                 <Typography variant="h5" mb={2}>
@@ -132,6 +132,7 @@ const AuctionPage = () => {
                                         {bidPlaced ? 'Bid Placed' : 'Place a Bid'}
                                     </Button>
                                 ) : (
+                                    
                                     <>
                                         <Typography variant="h6" mb={1}>
                                             Bids Received: {auctionData.bids?.length || 0}
@@ -176,8 +177,8 @@ const AuctionPage = () => {
                                         </Box>
                                     </>
                                 )}
-                               {auctionData.status === 'Closed' && user.role === 'provider' && <WinnerCard />}
-
+                               
+                               {auctionData.status === 'Closed' && user.role === 'provider' && <WinnerCard bidder={auctionData.won.bidder} bid={auctionData.won.bidAmount}/>}
                                 
                             </Grid>
                         </Grid>
